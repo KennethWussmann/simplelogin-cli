@@ -1,7 +1,7 @@
 {
   "name": "@ketrwu/simplelogin-cli",
   "description": "Unofficial SimpleLogin CLI",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Kenneth Wußmann",
   "bin": {
     "sl": "./bin/run.js"
@@ -64,6 +64,7 @@
     "build": "shx rm -rf dist && tsc -b",
     "lint": "eslint",
     "postpack": "shx rm -f oclif.manifest.json",
+    "pack:tarballs": "oclif pack tarballs",
     "posttest": "pnpm run lint",
     "prepack": "oclif manifest && oclif readme",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
