@@ -29,6 +29,7 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`sl alias ls`](#sl-alias-ls)
 * [`sl hello PERSON`](#sl-hello-person)
 * [`sl hello world`](#sl-hello-world)
 * [`sl help [COMMAND]`](#sl-help-command)
@@ -42,6 +43,47 @@ USAGE
 * [`sl plugins uninstall [PLUGIN]`](#sl-plugins-uninstall-plugin)
 * [`sl plugins unlink [PLUGIN]`](#sl-plugins-unlink-plugin)
 * [`sl plugins update`](#sl-plugins-update)
+
+## `sl alias ls`
+
+List all aliases with pagination
+
+```
+USAGE
+  $ sl alias ls [--config <value>] [--format plain|json|yaml] [--page <value>] [--pinned | --disabled |
+    --enabled] [--all]
+
+FLAGS
+  --all              Fetch all pages automatically
+  --config=<value>   [env: SIMPLELOGIN_CONFIG] Path to config file containing credentials
+  --disabled         Show only disabled aliases
+  --enabled          Show only enabled aliases
+  --format=<option>  [default: plain] Output format
+                     <options: plain|json|yaml>
+  --page=<value>     Page number (20 aliases per page)
+  --pinned           Show only pinned aliases
+
+DESCRIPTION
+  List all aliases with pagination
+
+ALIASES
+  $ sl alias ls
+
+EXAMPLES
+  $ sl alias ls
+
+  $ sl alias ls --page 1
+
+  $ sl alias ls --pinned
+
+  $ sl alias ls --disabled
+
+  $ sl alias ls --enabled
+
+  $ sl alias ls --all
+
+  $ sl alias ls --format json
+```
 
 ## `sl hello PERSON`
 

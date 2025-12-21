@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is an unofficial SimpleLogin CLI (`sl`) built with the Oclif framework. It's a command-line tool for managing SimpleLogin aliases, mailboxes, and account settings, designed for scripting and automation.
 
 **Key Technologies:**
+
 - TypeScript (ES2022, Node16 modules)
 - Oclif v4 framework for CLI structure
 - simplelogin-client SDK for API interactions
@@ -42,6 +43,8 @@ pnpm run pack:tarballs  # Creates distribution tarballs
 sl <command>
 ```
 
+Important: Run pnpm prepack when creating new Oclif commands so that metadata is updated and the command can be executed
+
 ## Project Structure
 
 ```
@@ -76,6 +79,7 @@ This project uses Oclif's class-based command structure. Each command is a TypeS
 3. **Implements `run()` method**: Main command logic
 
 Example structure:
+
 ```typescript
 import {Command, Flags, Args} from '@oclif/core'
 
@@ -107,6 +111,7 @@ export default class MyCommand extends Command {
 ### Testing Pattern
 
 Tests use `@oclif/test` and Chai for assertions:
+
 ```typescript
 import {runCommand} from '@oclif/test'
 import {expect} from 'chai'
@@ -139,6 +144,7 @@ The `CLI_DESIGN.md` file contains the complete specification for all commands to
 ### SDK Integration
 
 All commands interact with the SimpleLogin API via the `simplelogin-client` package:
+
 - `AccountApi` - User account operations
 - `AliasApi` - Alias management
 - `MailboxApi` - Mailbox operations
@@ -147,6 +153,7 @@ All commands interact with the SimpleLogin API via the `simplelogin-client` pack
 ### Output Formatting
 
 Commands must support three output formats via `--format` flag:
+
 - **plain** (default): Human-readable tables and key-value pairs
 - **json**: Structured JSON for scripting
 - **yaml**: YAML format for readability and scripting
@@ -154,6 +161,7 @@ Commands must support three output formats via `--format` flag:
 ### Error Handling & Exit Codes
 
 Standard exit codes:
+
 - 0: Success
 - 1: General error
 - 2: Invalid arguments

@@ -29,91 +29,13 @@ Docker-style aliases are supported (e.g., `rm` for `delete`, `ls` for `list`).
 
 ---
 
-# Base Commands
-
-## `sl whoami`
-
-Check the authenticated user
-
-**Internal Reference:** `getAuthenticatedUser()`
-
-### Parameters
-
-No command-specific parameters.
-
-### Acceptance Criteria
-
-- Call `getAuthenticatedUser()`
-- Output user data
-- In JSON/YAML format, return `{success: true, data: UserInfo}`
-
-**Authorization:** Required
-
----
-
-
-## `sl logout`
-
-Remove API credentials from config.
-
-### Parameters
-
-No command-specific parameters.
-
-### Acceptance Criteria
-
-- Remove API key from config file, keep URL
-- Output confirmation message
-- In JSON/YAML format, return `{success: true}`
-
-**Authorization:** Required
-
----
-
-## `sl config`
-
-Display current configuration.
-
-### Parameters
-
-| Parameter | Type | Default | Required | Description |
-|-----------|------|---------|----------|-------------|
-| `--show-key` | boolean | false | No | Show full API key (default: redacted) |
-
-### Acceptance Criteria
-
-- Read and display config from `--config` path
-- Redact API key by default (show as `******`)
-- If `--show-key`, display full API key
-- In plain format, display as key-value pairs
-- In JSON/YAML format, return config object
-- If config doesn't exist, show empty/default values
-
-**Authorization:** None
-
----
-
 # Account Commands
 
 ## `sl account info`
 
 Get account information.
 
-**SDK Reference:** `AccountApi.getUserInfo()`
-
-### Parameters
-
-No command-specific parameters.
-
-### Acceptance Criteria
-
-- Call `AccountApi.getUserInfo()`
-- In plain format, display user info as formatted key-value pairs
-- In JSON/YAML format, return full UserInfo object
-- Show: name, email, premium status, trial status, max aliases
-
-**Authorization:** Required
-
+Basically an alias of the `sl whoami`
 ---
 
 ## `sl account stats`
@@ -345,7 +267,7 @@ Create a new random alias.
 
 ---
 
-## `sl alias create-custom`
+## `sl alias create-custom` / `sl alias custom`
 
 Create a custom alias with specific prefix and suffix.
 
