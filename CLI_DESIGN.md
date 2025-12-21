@@ -463,6 +463,10 @@ Get available options for creating aliases.
 | Parameter | Type | Default | Required | Description |
 |-----------|------|---------|----------|-------------|
 | `--hostname` | string | - | No | Get options for specific hostname |
+| `--domain` | string | - | No | Filter options for specific mail domain |
+| `--custom` | boolean | - | No | Filter options for custom ones |
+| `--premium` | boolean | - | No | Filter options for premium ones |
+| `--prefix` | boolean | - | No | Filter options for those that have a prefix in front of their suffix before the @ |
 
 ### Acceptance Criteria
 

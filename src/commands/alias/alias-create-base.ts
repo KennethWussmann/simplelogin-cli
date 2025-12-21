@@ -1,7 +1,7 @@
 import {Command, Flags} from '@oclif/core'
-import {AliasApi} from 'simplelogin-client'
+import {AliasApi, MailboxApi} from 'simplelogin-client'
 import {getSimpleLoginConfig} from '../../utils/simplelogin-client.js'
-import type {Alias} from 'simplelogin-client'
+import type {Alias, Mailbox} from 'simplelogin-client'
 import YAML from 'yaml'
 
 /**
@@ -146,5 +146,18 @@ export abstract class AliasCreateBase extends Command {
 
       this.log(lines.join('\n'))
     }
+  }
+
+
+  protected async getDefaultMailbox(configPath?: string): Promise<Mailbox> {
+    const api = new MailboxApi(await getSimpleLoginConfig(configPath))
+    const { mailboxes } = await api.getMailboxes()
+    const mailbox = mailboxes?.find(box => box._default) ?? mailboxes?.find(box => box.verified) ?? mailboxes?.at(0)
+
+    if (!mailbox) {
+      throw new Error("Failed to find default mailbox")
+    }
+
+    return mailbox
   }
 }

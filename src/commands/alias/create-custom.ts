@@ -1,6 +1,7 @@
 import {Args, Flags} from '@oclif/core'
 import {AliasCreateBase} from './alias-create-base.js'
-import type {AliasApi, Alias} from 'simplelogin-client'
+import {type AliasApi, type Alias, MailboxApi} from 'simplelogin-client'
+import { getSimpleLoginConfig } from '../../utils/simplelogin-client.js'
 
 export default class AliasCreateCustom extends AliasCreateBase {
   static override hidden = false
@@ -8,7 +9,7 @@ export default class AliasCreateCustom extends AliasCreateBase {
 
   static examples = [
     '<%= config.bin %> <%= command.id %> myprefix signed_suffix --mailbox-ids 1,2',
-    '<%= config.bin %> <%= command.id %> john suffix123 --mailbox-ids 1 --note "Work email"',
+    '<%= config.bin %> <%= command.id %> john suffix123 --note "Work email to my default mailbox"',
     '<%= config.bin %> <%= command.id %> support suffix456 --mailbox-ids 1 --name "Support" --hostname example.com',
     '<%= config.bin %> <%= command.id %> custom suffix789 --mailbox-ids 1,2,3 --format json',
   ]
@@ -29,8 +30,7 @@ export default class AliasCreateCustom extends AliasCreateBase {
   static flags = {
     ...AliasCreateBase.flags,
     'mailbox-ids': Flags.string({
-      description: 'Comma-separated mailbox IDs',
-      required: true,
+      description: 'Comma-separated mailbox IDs. Default if not specified.',
     }),
     name: Flags.string({
       description: 'Display name',
@@ -53,15 +53,19 @@ export default class AliasCreateCustom extends AliasCreateBase {
 
     // Parse mailbox IDs
     try {
-      const mailboxIdStr = flags['mailbox-ids'] as string
-      this.mailboxIds = mailboxIdStr.split(',').map(id => {
-        const parsed = Number.parseInt(id.trim(), 10)
-        if (Number.isNaN(parsed)) {
-          throw new Error(`Invalid mailbox ID: ${id}`)
-        }
+      const mailboxIdStr = flags['mailbox-ids']
+      if (mailboxIdStr) {
+        this.mailboxIds = mailboxIdStr.split(',').map(id => {
+          const parsed = Number.parseInt(id.trim(), 10)
+          if (Number.isNaN(parsed)) {
+            throw new Error(`Invalid mailbox ID: ${id}`)
+          }
 
-        return parsed
-      })
+          return parsed
+        })
+      } else {
+        this.mailboxIds = [(await this.getDefaultMailbox()).id]
+      }
 
       if (this.mailboxIds.length === 0) {
         throw new Error('At least one mailbox ID is required')

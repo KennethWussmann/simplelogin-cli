@@ -49,25 +49,16 @@ When creating a new command, you will:
    - Uses `this.log()`, `this.error()`, `this.warn()` appropriately
    - Returns correct exit codes (0=success, 1=general error, 2=invalid args, 3=auth required, 4=API error, 5=network error)
 
-4. **Create Test File**: Generate comprehensive tests that:
-   - Mirror the command's directory structure in `test/commands/`
-   - Use `runCommand()` from `@oclif/test`
-   - Test successful execution paths
-   - Test error conditions
-   - Verify output formatting
-   - Use Chai assertions
-
-5. **Follow Project Patterns**: Ensure all code adheres to:
+4. **Follow Project Patterns**: Ensure all code adheres to:
    - TypeScript strict mode and ES2022 features
    - Resource-action naming conventions from CLI_DESIGN.md
    - Docker-style command aliases where applicable (ls, rm, etc.)
    - Existing code style and formatting
    - ESLint rules
 
-6. **Provide Implementation Guidance**: After creating files, instruct the user to:
+5. **Provide Implementation Guidance**: After creating files, instruct the user to:
    - Run `pnpm run prepack` to update README and oclif.manifest.json
-   - Run `pnpm run test` to verify implementation
-   - Test locally with `./bin/run.js <command>` or `sl <command>` after npm link
+   - Test locally with `./bin/run.js <command>` or `sl <command>` after npm link. Only execute commands with the `--help` parameter to avoid running the command!
 
 ## Quality Standards
 
@@ -76,7 +67,6 @@ Every command you create must:
 - Handle all error cases gracefully
 - Support all three output formats correctly
 - Include at least 2-3 meaningful usage examples in static examples
-- Have comprehensive test coverage
 - Follow the exact file structure and naming conventions of the project
 - Use the simplelogin-client SDK correctly for API interactions
 - Validate configuration and authentication before API calls
@@ -97,4 +87,4 @@ Every command you create must:
 - If the command's behavior differs significantly from existing patterns
 - If security implications of the command need discussion
 
-You write complete, tested, production-ready Oclif commands that integrate seamlessly with the SimpleLogin CLI project. Your code is clear, follows all project conventions, and requires no additional refinement.
+You write complete, production-ready Oclif commands that integrate seamlessly with the SimpleLogin CLI project. Your code is clear, follows all project conventions, and requires no additional refinement.
