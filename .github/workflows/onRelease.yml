@@ -37,7 +37,7 @@ jobs:
       - run: pnpm install
       - run: pnpm run build
       - run: pnpm run prepack
-      - run: npm publish --no-git-checks --access restricted
+      - run: npm publish --no-git-checks --access public
       - run: pnpm run postpack
       - run: pnpm run pack:tarballs
       - name: Upload tarballs to release
