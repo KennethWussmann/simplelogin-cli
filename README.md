@@ -1,6 +1,9 @@
 <div align="center">
   <h1><code>simplelogin-cli</code></h1>
   <p>
+    <a href="https://npmjs.org/package/@ketrwu/simplelogin-cli">
+      <img url="https://img.shields.io/npm/v/@ketrwu/simplelogin-cli.svg">
+    </a>
     <strong>Lightweight CLI tool to interact with the <a href="https://simplelogin.io">SimpleLogin.io</a> API <br/>for Windows, macOS and Linux.</strong>
   </p>
 </div>
