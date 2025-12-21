@@ -20,9 +20,30 @@ jobs:
           node-version: '24'
           registry-url: 'https://registry.npmjs.org'
       - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          package_json_file: package.json
+          run_install: false
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
       - run: pnpm install
       - run: pnpm run build
       - run: pnpm run prepack
+      - name: Create .npmrc
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       - run: npm publish --no-git-checks --access restricted
       - run: pnpm run postpack
       - run: pnpm run pack:tarballs
