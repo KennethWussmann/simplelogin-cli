@@ -8,16 +8,35 @@
 SimpleLogin is an e-mail aliasing service by Proton. This is a third-party CLI tool using [simplelogin-client](https://github.com/KennethWussmann/simplelogin-client) under the hood.
 
 <!-- toc -->
-* [Installation](#installation)
-* [Usage](#usage)
-* [Configuration](#configuration)
-* [Fetch available signed suffix for the domain](#fetch-available-signed-suffix-for-the-domain)
-* [Create the alias](#create-the-alias)
-* [Export all enabled aliases to a CSV file](#export-all-enabled-aliases-to-a-csv-file)
-* [Create account with unique alias in 1Password](#create-account-with-unique-alias-in-1password)
-* [Generate a new alias](#generate-a-new-alias)
-* [Create password manager entry with the alias](#create-password-manager-entry-with-the-alias)
-* [Commands](#commands)
+
+- [Installation](#installation)
+- [Usage](#usage)
+  * [Automation & Scripting](#automation--scripting)
+    + [Why This Matters](#why-this-matters)
+    + [Output Format Control](#output-format-control)
+    + [Practical Automation Examples](#practical-automation-examples)
+      - [Extract All Alias Emails](#extract-all-alias-emails)
+      - [Automated Alias Generation Script](#automated-alias-generation-script)
+      - [Filter and Export Specific Aliases](#filter-and-export-specific-aliases)
+      - [Password Manager Integration](#password-manager-integration)
+    + [Integration Benefits](#integration-benefits)
+- [Commands](#commands)
+  * [`sl alias create`](#sl-alias-create)
+  * [`sl alias create-custom PREFIX SUFFIX`](#sl-alias-create-custom-prefix-suffix)
+  * [`sl alias custom PREFIX SUFFIX`](#sl-alias-custom-prefix-suffix)
+  * [`sl alias delete ALIAS-ID`](#sl-alias-delete-alias-id)
+  * [`sl alias list`](#sl-alias-list)
+  * [`sl alias ls`](#sl-alias-ls)
+  * [`sl alias options`](#sl-alias-options)
+  * [`sl alias rm ALIAS-ID`](#sl-alias-rm-alias-id)
+  * [`sl alias search QUERY`](#sl-alias-search-query)
+  * [`sl alias update ALIAS-ID`](#sl-alias-update-alias-id)
+  * [`sl config`](#sl-config)
+  * [`sl help [COMMAND]`](#sl-help-command)
+  * [`sl login`](#sl-login)
+  * [`sl logout`](#sl-logout)
+  * [`sl whoami`](#sl-whoami)
+
 <!-- tocstop -->
 
 # Installation
@@ -290,7 +309,7 @@ EXAMPLES
   $ sl alias create --mode word --note "Shopping" --format json
 ```
 
-_See code: [src/commands/alias/create.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.1.3/src/commands/alias/create.ts)_
+_See code: [src/commands/alias/create.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/alias/create.ts)_
 
 ## `sl alias create-custom PREFIX SUFFIX`
 
@@ -330,7 +349,7 @@ EXAMPLES
   $ sl alias create-custom custom suffix789 --mailbox-ids 1,2,3 --format json
 ```
 
-_See code: [src/commands/alias/create-custom.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.1.3/src/commands/alias/create-custom.ts)_
+_See code: [src/commands/alias/create-custom.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/alias/create-custom.ts)_
 
 ## `sl alias custom PREFIX SUFFIX`
 
@@ -403,7 +422,7 @@ EXAMPLES
   $ sl alias rm 123 --confirm
 ```
 
-_See code: [src/commands/alias/delete.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.1.3/src/commands/alias/delete.ts)_
+_See code: [src/commands/alias/delete.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/alias/delete.ts)_
 
 ## `sl alias list`
 
@@ -446,7 +465,7 @@ EXAMPLES
   $ sl alias list --format json
 ```
 
-_See code: [src/commands/alias/list.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.1.3/src/commands/alias/list.ts)_
+_See code: [src/commands/alias/list.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/alias/list.ts)_
 
 ## `sl alias ls`
 
@@ -529,7 +548,7 @@ EXAMPLES
   $ sl alias options --format json
 ```
 
-_See code: [src/commands/alias/options.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.1.3/src/commands/alias/options.ts)_
+_See code: [src/commands/alias/options.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/alias/options.ts)_
 
 ## `sl alias rm ALIAS-ID`
 
@@ -601,7 +620,7 @@ EXAMPLES
   $ sl alias search search --format json
 ```
 
-_See code: [src/commands/alias/search.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.1.3/src/commands/alias/search.ts)_
+_See code: [src/commands/alias/search.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/alias/search.ts)_
 
 ## `sl alias update ALIAS-ID`
 
@@ -645,7 +664,7 @@ EXAMPLES
   $ sl alias update 123 --note "Shopping" --pinned --format json
 ```
 
-_See code: [src/commands/alias/update.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.1.3/src/commands/alias/update.ts)_
+_See code: [src/commands/alias/update.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/alias/update.ts)_
 
 ## `sl config`
 
@@ -672,7 +691,7 @@ EXAMPLES
   $ sl config --format json
 ```
 
-_See code: [src/commands/config.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.1.3/src/commands/config.ts)_
+_See code: [src/commands/config.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/config.ts)_
 
 ## `sl help [COMMAND]`
 
@@ -722,7 +741,7 @@ EXAMPLES
   $ sl login --key api-key
 ```
 
-_See code: [src/commands/login.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.1.3/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/login.ts)_
 
 ## `sl logout`
 
@@ -746,7 +765,7 @@ EXAMPLES
   $ sl logout --format json
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.1.3/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/logout.ts)_
 
 ## `sl whoami`
 
@@ -770,5 +789,5 @@ EXAMPLES
   $ sl whoami --format json
 ```
 
-_See code: [src/commands/whoami.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.1.3/src/commands/whoami.ts)_
+_See code: [src/commands/whoami.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/whoami.ts)_
 <!-- commandsstop -->
