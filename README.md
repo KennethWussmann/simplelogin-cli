@@ -1,50 +1,69 @@
-@ketrwu/simplelogin-cli
-=================
-
-Unofficial SimpleLogin CLI
-
-
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/@ketrwu/simplelogin-cli.svg)](https://npmjs.org/package/@ketrwu/simplelogin-cli)
-[![Downloads/week](https://img.shields.io/npm/dw/@ketrwu/simplelogin-cli.svg)](https://npmjs.org/package/@ketrwu/simplelogin-cli)
+<div align="center">
+  <h1><code>simplelogin-cli</code></h1>
+  <p>
+    <strong>Lightweight CLI tool to interact with the <a href="https://simplelogin.io">SimpleLogin.io</a> API. Compatible with Windows, macOS and Linux.</strong>
+  </p>
+  <p>
+    SimpleLogin is an e-mail aliasing service by Proton. This CLI tool allows to manage aliases via the terminal or in scripts.
+  </p>
+</div>
 
 
 <!-- toc -->
+* [Installation](#installation)
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
-# Usage
-<!-- usage -->
+
+# Installation
+
+Installing the CLI is done via the [Node Package Manager](https://nodejs.org/en).
+
 ```sh-session
+## Install with NPM
 $ npm install -g @ketrwu/simplelogin-cli
-$ sl COMMAND
-running command...
-$ sl (--version)
-@ketrwu/simplelogin-cli/0.0.6 linux-x64 node-v24.11.1
+
+## or install with PNPM
+$ pnpm add -g @ketrwu/simplelogin-cli
+...
+```
+
+# Usage
+
+> Requires a SimpleLogin API key
+
+```sh-session
+## 1. Login to your SimpleLogin account via API key
+$ sl login
+
+## 2. Create a new random alias
+$ sl alias create
+Alias created successfully
+ID:      100
+Email:   thirty_cheese123@example.com
+Enabled: true
+Mailboxes: user@example.com
+
+## 3. Use the help documentation for more details 
 $ sl --help [COMMAND]
 USAGE
   $ sl COMMAND
 ...
 ```
-<!-- usagestop -->
+
+The CLI is fully scriptable. You can control the output format with the `--format <plain|json|yaml>` flag. This is helpful to work with the data in other tools, for example:
+
+```sh-session
+## Get all email aliases and transform them with jq
+$ sl alias ls --format json | jq "map(.email)"  
+```
+
 # Commands
 <!-- commands -->
 * [`sl alias custom PREFIX SUFFIX`](#sl-alias-custom-prefix-suffix)
 * [`sl alias ls`](#sl-alias-ls)
 * [`sl alias rm ALIAS-ID`](#sl-alias-rm-alias-id)
-* [`sl hello PERSON`](#sl-hello-person)
-* [`sl hello world`](#sl-hello-world)
 * [`sl help [COMMAND]`](#sl-help-command)
-* [`sl plugins`](#sl-plugins)
-* [`sl plugins add PLUGIN`](#sl-plugins-add-plugin)
-* [`sl plugins:inspect PLUGIN...`](#sl-pluginsinspect-plugin)
-* [`sl plugins install PLUGIN`](#sl-plugins-install-plugin)
-* [`sl plugins link PATH`](#sl-plugins-link-path)
-* [`sl plugins remove [PLUGIN]`](#sl-plugins-remove-plugin)
-* [`sl plugins reset`](#sl-plugins-reset)
-* [`sl plugins uninstall [PLUGIN]`](#sl-plugins-uninstall-plugin)
-* [`sl plugins unlink [PLUGIN]`](#sl-plugins-unlink-plugin)
-* [`sl plugins update`](#sl-plugins-update)
 
 ## `sl alias custom PREFIX SUFFIX`
 
@@ -158,48 +177,6 @@ EXAMPLES
   $ sl alias rm 123 --confirm
 ```
 
-## `sl hello PERSON`
-
-Say hello
-
-```
-USAGE
-  $ sl hello PERSON -f <value>
-
-ARGUMENTS
-  PERSON  Person to say hello to
-
-FLAGS
-  -f, --from=<value>  (required) Who is saying hello
-
-DESCRIPTION
-  Say hello
-
-EXAMPLES
-  $ sl hello friend --from oclif
-  hello friend from oclif! (./src/commands/hello/index.ts)
-```
-
-_See code: [src/commands/hello/index.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.0.6/src/commands/hello/index.ts)_
-
-## `sl hello world`
-
-Say hello world
-
-```
-USAGE
-  $ sl hello world
-
-DESCRIPTION
-  Say hello world
-
-EXAMPLES
-  $ sl hello world
-  hello world! (./src/commands/hello/world.ts)
-```
-
-_See code: [src/commands/hello/world.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.0.6/src/commands/hello/world.ts)_
-
 ## `sl help [COMMAND]`
 
 Display help for sl.
@@ -219,294 +196,4 @@ DESCRIPTION
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.36/src/commands/help.ts)_
-
-## `sl plugins`
-
-List installed plugins.
-
-```
-USAGE
-  $ sl plugins [--json] [--core]
-
-FLAGS
-  --core  Show core plugins.
-
-GLOBAL FLAGS
-  --json  Format output as json.
-
-DESCRIPTION
-  List installed plugins.
-
-EXAMPLES
-  $ sl plugins
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.54/src/commands/plugins/index.ts)_
-
-## `sl plugins add PLUGIN`
-
-Installs a plugin into sl.
-
-```
-USAGE
-  $ sl plugins add PLUGIN... [--json] [-f] [-h] [-s | -v]
-
-ARGUMENTS
-  PLUGIN...  Plugin to install.
-
-FLAGS
-  -f, --force    Force npm to fetch remote resources even if a local copy exists on disk.
-  -h, --help     Show CLI help.
-  -s, --silent   Silences npm output.
-  -v, --verbose  Show verbose npm output.
-
-GLOBAL FLAGS
-  --json  Format output as json.
-
-DESCRIPTION
-  Installs a plugin into sl.
-
-  Uses npm to install plugins.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  Use the SL_NPM_LOG_LEVEL environment variable to set the npm loglevel.
-  Use the SL_NPM_REGISTRY environment variable to set the npm registry.
-
-ALIASES
-  $ sl plugins add
-
-EXAMPLES
-  Install a plugin from npm registry.
-
-    $ sl plugins add myplugin
-
-  Install a plugin from a github url.
-
-    $ sl plugins add https://github.com/someuser/someplugin
-
-  Install a plugin from a github slug.
-
-    $ sl plugins add someuser/someplugin
-```
-
-## `sl plugins:inspect PLUGIN...`
-
-Displays installation properties of a plugin.
-
-```
-USAGE
-  $ sl plugins inspect PLUGIN...
-
-ARGUMENTS
-  PLUGIN...  [default: .] Plugin to inspect.
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-GLOBAL FLAGS
-  --json  Format output as json.
-
-DESCRIPTION
-  Displays installation properties of a plugin.
-
-EXAMPLES
-  $ sl plugins inspect myplugin
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.54/src/commands/plugins/inspect.ts)_
-
-## `sl plugins install PLUGIN`
-
-Installs a plugin into sl.
-
-```
-USAGE
-  $ sl plugins install PLUGIN... [--json] [-f] [-h] [-s | -v]
-
-ARGUMENTS
-  PLUGIN...  Plugin to install.
-
-FLAGS
-  -f, --force    Force npm to fetch remote resources even if a local copy exists on disk.
-  -h, --help     Show CLI help.
-  -s, --silent   Silences npm output.
-  -v, --verbose  Show verbose npm output.
-
-GLOBAL FLAGS
-  --json  Format output as json.
-
-DESCRIPTION
-  Installs a plugin into sl.
-
-  Uses npm to install plugins.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  Use the SL_NPM_LOG_LEVEL environment variable to set the npm loglevel.
-  Use the SL_NPM_REGISTRY environment variable to set the npm registry.
-
-ALIASES
-  $ sl plugins add
-
-EXAMPLES
-  Install a plugin from npm registry.
-
-    $ sl plugins install myplugin
-
-  Install a plugin from a github url.
-
-    $ sl plugins install https://github.com/someuser/someplugin
-
-  Install a plugin from a github slug.
-
-    $ sl plugins install someuser/someplugin
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.54/src/commands/plugins/install.ts)_
-
-## `sl plugins link PATH`
-
-Links a plugin into the CLI for development.
-
-```
-USAGE
-  $ sl plugins link PATH [-h] [--install] [-v]
-
-ARGUMENTS
-  PATH  [default: .] path to plugin
-
-FLAGS
-  -h, --help          Show CLI help.
-  -v, --verbose
-      --[no-]install  Install dependencies after linking the plugin.
-
-DESCRIPTION
-  Links a plugin into the CLI for development.
-
-  Installation of a linked plugin will override a user-installed or core plugin.
-
-  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
-  command will override the user-installed or core plugin implementation. This is useful for development work.
-
-
-EXAMPLES
-  $ sl plugins link myplugin
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.54/src/commands/plugins/link.ts)_
-
-## `sl plugins remove [PLUGIN]`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ sl plugins remove [PLUGIN...] [-h] [-v]
-
-ARGUMENTS
-  [PLUGIN...]  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ sl plugins unlink
-  $ sl plugins remove
-
-EXAMPLES
-  $ sl plugins remove myplugin
-```
-
-## `sl plugins reset`
-
-Remove all user-installed and linked plugins.
-
-```
-USAGE
-  $ sl plugins reset [--hard] [--reinstall]
-
-FLAGS
-  --hard       Delete node_modules and package manager related files in addition to uninstalling plugins.
-  --reinstall  Reinstall all plugins after uninstalling.
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.54/src/commands/plugins/reset.ts)_
-
-## `sl plugins uninstall [PLUGIN]`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ sl plugins uninstall [PLUGIN...] [-h] [-v]
-
-ARGUMENTS
-  [PLUGIN...]  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ sl plugins unlink
-  $ sl plugins remove
-
-EXAMPLES
-  $ sl plugins uninstall myplugin
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.54/src/commands/plugins/uninstall.ts)_
-
-## `sl plugins unlink [PLUGIN]`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ sl plugins unlink [PLUGIN...] [-h] [-v]
-
-ARGUMENTS
-  [PLUGIN...]  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ sl plugins unlink
-  $ sl plugins remove
-
-EXAMPLES
-  $ sl plugins unlink myplugin
-```
-
-## `sl plugins update`
-
-Update installed plugins.
-
-```
-USAGE
-  $ sl plugins update [-h] [-v]
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Update installed plugins.
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.54/src/commands/plugins/update.ts)_
 <!-- commandsstop -->
