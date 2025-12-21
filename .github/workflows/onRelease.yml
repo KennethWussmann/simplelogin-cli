@@ -19,7 +19,7 @@ jobs:
       - run: pnpm install
       - run: pnpm run build
       - run: pnpm run prepack
-      - run: pnpm publish --no-git-checks --access restricted
+      - run: npm publish --no-git-checks --access restricted
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: pnpm run postpack
