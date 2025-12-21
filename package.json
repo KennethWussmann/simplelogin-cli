@@ -1,7 +1,7 @@
 {
   "name": "@ketrwu/simplelogin-cli",
   "description": "Unofficial SimpleLogin CLI",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Kenneth Wußmann",
   "bin": {
     "sl": "./bin/run.js"
@@ -9,6 +9,7 @@
   "keywords": [
     "simplelogin",
     "api",
+    "cli",
     "client",
     "sdk",
     "rest",
