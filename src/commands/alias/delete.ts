@@ -6,6 +6,7 @@ import * as readline from 'node:readline/promises'
 import {stdin as input, stdout as output} from 'node:process'
 
 export default class AliasDelete extends BaseCommand<typeof AliasDelete> {
+  static override hidden = false
   static description = 'Delete an alias by ID'
 
   static examples = [

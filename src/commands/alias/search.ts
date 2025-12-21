@@ -3,6 +3,7 @@ import {AliasListBase} from './alias-list-base.js'
 import type {AliasApi, AliasModelArray} from 'simplelogin-client'
 
 export default class AliasSearch extends AliasListBase {
+  static override hidden = false
   static description = 'Search aliases by email address'
 
   static examples = [

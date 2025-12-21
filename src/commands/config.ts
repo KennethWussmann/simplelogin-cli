@@ -3,6 +3,7 @@ import {BaseCommand} from './base.js'
 import {redactApiKey} from '../utils/config.js'
 
 export default class Config extends BaseCommand<typeof Config> {
+  static override hidden = false
   static description = 'Display current configuration'
 
   static examples = [

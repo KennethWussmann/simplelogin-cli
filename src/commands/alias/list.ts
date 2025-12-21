@@ -2,6 +2,7 @@ import {AliasListBase} from './alias-list-base.js'
 import type {AliasApi, AliasModelArray} from 'simplelogin-client'
 
 export default class AliasList extends AliasListBase {
+  static override hidden = false
   static description = 'List all aliases with pagination'
 
   static examples = [

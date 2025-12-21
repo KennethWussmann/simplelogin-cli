@@ -3,6 +3,7 @@ import {AliasCreateBase} from './alias-create-base.js'
 import type {AliasApi, Alias} from 'simplelogin-client'
 
 export default class AliasCreateCustom extends AliasCreateBase {
+  static override hidden = false
   static description = 'Create a custom alias with specific prefix and suffix'
 
   static examples = [

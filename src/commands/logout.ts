@@ -2,6 +2,7 @@ import {BaseCommand} from './base.js'
 import {writeConfig} from '../utils/config.js'
 
 export default class Logout extends BaseCommand<typeof Logout> {
+  static override hidden = false
   static description = 'Remove API credentials from config'
 
   static examples = [

@@ -1,7 +1,7 @@
 {
   "name": "@ketrwu/simplelogin-cli",
   "description": "Unofficial SimpleLogin CLI",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Kenneth Wußmann",
   "bin": {
     "sl": "./bin/run.js"
@@ -59,8 +59,7 @@
       "@oclif/plugin-help"
     ],
     "topicSeparator": " ",
-    "topics": {
-    }
+    "topics": {}
   },
   "repository": "KennethWussmann/simplelogin-cli",
   "scripts": {

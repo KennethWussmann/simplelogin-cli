@@ -6,6 +6,7 @@ import {readConfig, redactApiKey, writeConfig} from '../utils/config.js'
 import { getAuthenticatedUser, isAuthenticated } from '../utils/simplelogin-client.js'
 
 export default class Login extends BaseCommand<typeof Login> {
+  static override hidden = false
   static description = 'Authenticate with SimpleLogin and store credentials'
 
   static examples = [
