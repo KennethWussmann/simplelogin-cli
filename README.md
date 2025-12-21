@@ -1,13 +1,11 @@
 <div align="center">
   <h1><code>simplelogin-cli</code></h1>
   <p>
-    <strong>Lightweight CLI tool to interact with the <a href="https://simplelogin.io">SimpleLogin.io</a> API. Compatible with Windows, macOS and Linux.</strong>
-  </p>
-  <p>
-    SimpleLogin is an e-mail aliasing service by Proton. This CLI tool allows to manage aliases via the terminal or in scripts.
+    <strong>Lightweight CLI tool to interact with the <a href="https://simplelogin.io">SimpleLogin.io</a> API <br/>for Windows, macOS and Linux.</strong>
   </p>
 </div>
 
+SimpleLogin is an e-mail aliasing service by Proton. This CLI tool allows to manage aliases via the terminal or in scripts.
 
 <!-- toc -->
 * [Installation](#installation)
