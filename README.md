@@ -5,7 +5,7 @@
   </p>
 </div>
 
-SimpleLogin is an e-mail aliasing service by Proton. This CLI tool allows to manage aliases via the terminal or in scripts.
+SimpleLogin is an e-mail aliasing service by Proton. This is a third-party CLI tool using [simplelogin-client](https://github.com/KennethWussmann/simplelogin-client) under the hood.
 
 <!-- toc -->
 * [Installation](#installation)
