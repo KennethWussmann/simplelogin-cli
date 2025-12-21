@@ -1,7 +1,7 @@
 {
   "name": "@ketrwu/simplelogin-cli",
   "description": "Unofficial SimpleLogin CLI",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "Kenneth Wußmann",
   "bin": {
     "sl": "./bin/run.js"
