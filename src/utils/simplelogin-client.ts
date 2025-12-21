@@ -24,7 +24,8 @@ export async function getAuthenticatedUser(configPath?: string): Promise<UserInf
     try {
         const client = new AccountApi(await getSimpleLoginConfig(configPath))
         return await client.getUserInfo()
-    } catch {
+    } catch (e) {
+        console.error(e)
         return null
     }
 } 

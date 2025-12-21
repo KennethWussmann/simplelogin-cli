@@ -31,43 +31,11 @@ Docker-style aliases are supported (e.g., `rm` for `delete`, `ls` for `list`).
 
 # Base Commands
 
-## `sl login`
+## `sl whoami`
 
-Authenticate with SimpleLogin and store credentials.
+Check the authenticated user
 
-**SDK Reference:** `AccountApi.login()`
-
-### Parameters
-
-| Parameter | Type | Default | Required | Description |
-|-----------|------|---------|----------|-------------|
-| `--url` | string | - | No | SimpleLogin instance URL (e.g., https://app.simplelogin.io) |
-| `--email` | string | - | No | Email address for login |
-| `--password` | string | - | No | Password (prefer interactive prompt for security) |
-| `--device` | string | `simplelogin-cli` | No | Device name for the API key |
-
-### Acceptance Criteria
-
-- If `--url` is not provided and not in config, prompt for URL
-- If `--email` is not provided, prompt for email
-- If `--password` is not provided, prompt for password (hidden input)
-- Validate connection by calling API with credentials
-- If MFA is enabled, prompt for MFA token using `AccountApi.mfa()`
-- Store API key in config file at `--config` path
-- Create config directory if it doesn't exist
-- Config file permissions should be 600 (user read/write only)
-- Output success message with redacted API key in plain format
-- In JSON/YAML format, return `{success: true, url: string, email: string}`
-
-**Authorization:** None (this command establishes authorization)
-
----
-
-## `sl logout`
-
-Remove API credentials from config.
-
-**SDK Reference:** `AccountApi.logout()`
+**Internal Reference:** `getAuthenticatedUser()`
 
 ### Parameters
 
@@ -75,7 +43,25 @@ No command-specific parameters.
 
 ### Acceptance Criteria
 
-- Call `AccountApi.logout()` to invalidate the API key
+- Call `getAuthenticatedUser()`
+- Output user data
+- In JSON/YAML format, return `{success: true, data: UserInfo}`
+
+**Authorization:** Required
+
+---
+
+
+## `sl logout`
+
+Remove API credentials from config.
+
+### Parameters
+
+No command-specific parameters.
+
+### Acceptance Criteria
+
 - Remove API key from config file, keep URL
 - Output confirmation message
 - In JSON/YAML format, return `{success: true}`

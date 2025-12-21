@@ -1,6 +1,7 @@
 import {Command, Flags, Interfaces} from '@oclif/core'
 import YAML from 'yaml'
 import {readConfig, Config, getConfigPath} from '../utils/config.js'
+import { isAuthenticated } from '../utils/simplelogin-client.js'
 
 export type OutputFormat = 'plain' | 'json' | 'yaml'
 
@@ -115,14 +116,10 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
    * Require authentication for this command
    * Throws an error if not authenticated
    */
-  protected requireAuth(): string {
-    const config = this.readConfig()
-
-    if (!config.apiKey) {
+  protected async requireAuth(configPath?: string): Promise<void> {
+    if (!(await isAuthenticated(configPath))) {
       this.outputError('Please run \'sl login\' to authenticate', 'UNAUTHORIZED')
       this.exit(3)
     }
-
-    return config.apiKey
   }
 }

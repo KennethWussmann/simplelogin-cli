@@ -20,7 +20,7 @@ $ npm install -g @ketrwu/simplelogin-cli
 $ sl COMMAND
 running command...
 $ sl (--version)
-@ketrwu/simplelogin-cli/0.0.0 linux-x64 node-v24.11.1
+@ketrwu/simplelogin-cli/0.0.6 linux-x64 node-v24.11.1
 $ sl --help [COMMAND]
 USAGE
   $ sl COMMAND
@@ -65,7 +65,7 @@ EXAMPLES
   hello friend from oclif! (./src/commands/hello/index.ts)
 ```
 
-_See code: [src/commands/hello/index.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.0.0/src/commands/hello/index.ts)_
+_See code: [src/commands/hello/index.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.0.6/src/commands/hello/index.ts)_
 
 ## `sl hello world`
 
@@ -83,7 +83,7 @@ EXAMPLES
   hello world! (./src/commands/hello/world.ts)
 ```
 
-_See code: [src/commands/hello/world.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.0.0/src/commands/hello/world.ts)_
+_See code: [src/commands/hello/world.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.0.6/src/commands/hello/world.ts)_
 
 ## `sl help [COMMAND]`
 

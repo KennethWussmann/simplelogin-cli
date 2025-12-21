@@ -3,6 +3,7 @@ import {input, password} from '@inquirer/prompts'
 import {AccountApi, Configuration, SimpleLoginConfig} from 'simplelogin-client'
 import {BaseCommand} from './base.js'
 import {readConfig, redactApiKey, writeConfig} from '../utils/config.js'
+import { getAuthenticatedUser, isAuthenticated } from '../utils/simplelogin-client.js'
 
 export default class Login extends BaseCommand<typeof Login> {
   static description = 'Authenticate with SimpleLogin and store credentials'
@@ -28,11 +29,28 @@ export default class Login extends BaseCommand<typeof Login> {
   }
 
   async run(): Promise<void> {
+    const format = this.getFormat()
+    const config = readConfig(this.flags.config)
+    const user = await getAuthenticatedUser(this.flags.config)
+    if (user) {
+      const error = "You are already logged in. Use 'sl logout' to log out or 'sl whoami' for more details."
+      if (format === 'json' || format === 'yaml') {
+        this.output({
+          success: false,
+          error,
+          data: user,
+        })
+      } else {
+        this.log(error)
+        this.log(`Email: ${user.email}`)
+        this.log(`Premium: ${user.isPremium ? "Yes" : "No"}`)
+      }
+      this.exit(1)
+    }
     try {
       // Get or prompt for URL
       let url = this.flags.url
       if (!url) {
-        const config = readConfig(this.flags.config)
         url = config.url
       }
 
@@ -77,13 +95,11 @@ export default class Login extends BaseCommand<typeof Login> {
       writeConfig(
         {
           apiKey: key,
-          url,
+          url: basePath,
         },
         this.flags.config,
       )
 
-      // Output success message
-      const format = this.getFormat()
 
       if (format === 'json' || format === 'yaml') {
         this.output({

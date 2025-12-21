@@ -65,6 +65,7 @@
   "repository": "KennethWussmann/simplelogin-cli",
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
+    "build:watch": "shx rm -rf dist && tsc -b -w",
     "lint": "eslint",
     "postpack": "shx rm -f oclif.manifest.json",
     "pack:tarballs": "oclif pack tarballs",
