@@ -7,15 +7,30 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - run: pnpm install
       - run: pnpm run build
       - run: pnpm run prepack
-      - uses: JS-DevTools/npm-publish@19c28f1ef146469e409470805ea4279d47c3d35c
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+      - run: pnpm publish --no-git-checks --access restricted
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: pnpm run postpack
+      - run: pnpm run pack:tarballs
+      - name: Upload tarballs to release
+        uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5
+        with:
+          artifacts: "dist/*.tar*"
+          allowUpdates: true
+          omitBodyDuringUpdate: true
+          omitNameDuringUpdate: true
+          token: ${{ secrets.GH_TOKEN }}
