@@ -57,7 +57,7 @@ Mailboxes: sarah.chen@protonmail.com
 $ sl alias search "github" --enabled
 ID      Email                                   Enabled   Pinned    Mailboxes
 ----------------------------------------------------------------------------------------------------
-10      github@example.com                      Yes       No        kenneth@wussmann.net
+10      github@example.com                      Yes       No        sarah.chen@protonmail.com
 
 Total: 1 alias
 
@@ -100,9 +100,9 @@ Every command accepts the `--format` flag to control output structure:
 $ sl alias ls --page 0
 ID      Email                                   Enabled   Pinned    Mailboxes
 ----------------------------------------------------------------------------------------------------
-100     youtube@example.com                     Yes       No        private@example.com
-101     netflix@example.com                     Yes       No        private@example.com
-102     work@example.com                        Yes       No        private@example.com
+100     youtube@example.com                     Yes       No        sarah.chen@protonmail.com
+101     netflix@example.com                     Yes       No        sarah.chen@protonmail.com
+102     work@example.com                        Yes       No        sarah.chen@protonmail.com
 
 Total: 3 aliases
 
