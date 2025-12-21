@@ -1,10 +1,12 @@
 <div align="center">
-  <img url="./docs/banner.jpg" />
+  <img src="./docs/banner.jpg">
   <p>
-    <a href="https://npmjs.org/package/@ketrwu/simplelogin-cli">
-      <img url="https://img.shields.io/npm/v/@ketrwu/simplelogin-cli.svg" />
-    </a>
     <strong>Lightweight CLI tool to interact with the <a href="https://simplelogin.io">SimpleLogin.io</a> API <br/>for Windows, macOS and Linux.</strong>
+    <br/>
+    <br/>
+    <a href="https://npmjs.org/package/@ketrwu/simplelogin-cli">
+      <img src="https://img.shields.io/npm/v/@ketrwu/simplelogin-cli.svg" />
+    </a>
   </p>
 </div>
 
