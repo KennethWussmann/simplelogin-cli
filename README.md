@@ -29,6 +29,7 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`sl alias custom PREFIX SUFFIX`](#sl-alias-custom-prefix-suffix)
 * [`sl alias ls`](#sl-alias-ls)
 * [`sl hello PERSON`](#sl-hello-person)
 * [`sl hello world`](#sl-hello-world)
@@ -43,6 +44,44 @@ USAGE
 * [`sl plugins uninstall [PLUGIN]`](#sl-plugins-uninstall-plugin)
 * [`sl plugins unlink [PLUGIN]`](#sl-plugins-unlink-plugin)
 * [`sl plugins update`](#sl-plugins-update)
+
+## `sl alias custom PREFIX SUFFIX`
+
+Create a custom alias with specific prefix and suffix
+
+```
+USAGE
+  $ sl alias custom PREFIX SUFFIX --mailbox-ids <value> [--config <value>] [--format plain|json|yaml] [--note
+    <value>] [--hostname <value>] [--name <value>]
+
+ARGUMENTS
+  PREFIX  Alias prefix (local part)
+  SUFFIX  Signed suffix from alias options
+
+FLAGS
+  --config=<value>       [env: SIMPLELOGIN_CONFIG] Path to config file containing credentials
+  --format=<option>      [default: plain] Output format
+                         <options: plain|json|yaml>
+  --hostname=<value>     Associated hostname
+  --mailbox-ids=<value>  (required) Comma-separated mailbox IDs
+  --name=<value>         Display name
+  --note=<value>         Note/description for the alias
+
+DESCRIPTION
+  Create a custom alias with specific prefix and suffix
+
+ALIASES
+  $ sl alias custom
+
+EXAMPLES
+  $ sl alias custom myprefix signed_suffix --mailbox-ids 1,2
+
+  $ sl alias custom john suffix123 --mailbox-ids 1 --note "Work email"
+
+  $ sl alias custom support suffix456 --mailbox-ids 1 --name "Support" --hostname example.com
+
+  $ sl alias custom custom suffix789 --mailbox-ids 1,2,3 --format json
+```
 
 ## `sl alias ls`
 
