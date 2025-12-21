@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/commands/base.ts","./src/commands/login.ts","./src/commands/whoami.ts","./src/commands/hello/index.ts","./src/commands/hello/world.ts","./src/utils/config.ts","./src/utils/simplelogin-client.ts"],"version":"5.9.3"}
+{"root":["./src/index.ts","./src/commands/base.ts","./src/commands/config.ts","./src/commands/login.ts","./src/commands/logout.ts","./src/commands/whoami.ts","./src/commands/hello/index.ts","./src/commands/hello/world.ts","./src/utils/config.ts","./src/utils/simplelogin-client.ts"],"version":"5.9.3"}

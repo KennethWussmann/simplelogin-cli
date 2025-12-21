@@ -83,7 +83,7 @@ Display current configuration.
 ### Acceptance Criteria
 
 - Read and display config from `--config` path
-- Redact API key by default (show only first 8 chars)
+- Redact API key by default (show as `******`)
 - If `--show-key`, display full API key
 - In plain format, display as key-value pairs
 - In JSON/YAML format, return config object
