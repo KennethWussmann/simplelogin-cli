@@ -31,6 +31,7 @@ USAGE
 <!-- commands -->
 * [`sl alias custom PREFIX SUFFIX`](#sl-alias-custom-prefix-suffix)
 * [`sl alias ls`](#sl-alias-ls)
+* [`sl alias rm ALIAS-ID`](#sl-alias-rm-alias-id)
 * [`sl hello PERSON`](#sl-hello-person)
 * [`sl hello world`](#sl-hello-world)
 * [`sl help [COMMAND]`](#sl-help-command)
@@ -122,6 +123,39 @@ EXAMPLES
   $ sl alias ls --all
 
   $ sl alias ls --format json
+```
+
+## `sl alias rm ALIAS-ID`
+
+Delete an alias by ID
+
+```
+USAGE
+  $ sl alias rm ALIAS-ID [--config <value>] [--format plain|json|yaml] [--confirm]
+
+ARGUMENTS
+  ALIAS-ID  Alias ID to delete
+
+FLAGS
+  --config=<value>   [env: SIMPLELOGIN_CONFIG] Path to config file containing credentials
+  --confirm          Skip confirmation prompt
+  --format=<option>  [default: plain] Output format
+                     <options: plain|json|yaml>
+
+DESCRIPTION
+  Delete an alias by ID
+
+ALIASES
+  $ sl alias rm
+
+EXAMPLES
+  $ sl alias rm 123
+
+  $ sl alias rm 123 --confirm
+
+  $ sl alias rm 123 --format json
+
+  $ sl alias rm 123 --confirm
 ```
 
 ## `sl hello PERSON`
