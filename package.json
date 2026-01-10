@@ -20,7 +20,7 @@
     "@inquirer/prompts": "^8.1.0",
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",
-    "simplelogin-client": "^0.4.1",
+    "simplelogin-client": "^0.5.1",
     "yaml": "^2.8.2"
   },
   "devDependencies": {
