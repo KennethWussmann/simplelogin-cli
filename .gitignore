@@ -7,7 +7,7 @@
 /node_modules
 oclif.manifest.json
 
-
+/debug
 yarn.lock
 package-lock.json
 
