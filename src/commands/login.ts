@@ -1,25 +1,23 @@
-import {Flags} from '@oclif/core'
 import {input, password} from '@inquirer/prompts'
-import {AccountApi, Configuration, SimpleLoginConfig} from 'simplelogin-client'
-import {BaseCommand} from './base.js'
+import {Flags} from '@oclif/core'
+import {AccountApi, SimpleLoginConfig} from 'simplelogin-client'
+
 import {readConfig, redactApiKey, writeConfig} from '../utils/config.js'
-import { getAuthenticatedUser, isAuthenticated } from '../utils/simplelogin-client.js'
+import { getAuthenticatedUser } from '../utils/simplelogin-client.js'
+import {BaseCommand} from './base.js'
 
 export default class Login extends BaseCommand<typeof Login> {
-  static override hidden = false
   static description = 'Authenticate with SimpleLogin and store credentials'
-
   static examples = [
     '<%= config.bin %> <%= command.id %>',
     '<%= config.bin %> <%= command.id %> --url https://app.simplelogin.io',
     '<%= config.bin %> <%= command.id %> --key api-key',
   ]
-
-  static flags = {
+static flags = {
     ...BaseCommand.baseFlags,
     device: Flags.string({
-      description: 'Device name for the API key',
       default: 'simplelogin-cli',
+      description: 'Device name for the API key',
     }),
     key: Flags.string({
       description: 'API key (prefer interactive prompt for security)',
@@ -28,6 +26,7 @@ export default class Login extends BaseCommand<typeof Login> {
       description: 'SimpleLogin instance URL (e.g., https://app.simplelogin.io)',
     }),
   }
+static override hidden = false
 
   async run(): Promise<void> {
     const format = this.getFormat()
@@ -37,33 +36,34 @@ export default class Login extends BaseCommand<typeof Login> {
       const error = "You are already logged in. Use 'sl logout' to log out or 'sl whoami' for more details."
       if (format === 'json' || format === 'yaml') {
         this.output({
-          success: false,
-          error,
           data: user,
+          error,
+          success: false,
         })
       } else {
         this.log(error)
         this.log(`Email: ${user.email}`)
         this.log(`Premium: ${user.isPremium ? "Yes" : "No"}`)
       }
+
       this.exit(1)
     }
+
     try {
       // Get or prompt for URL
-      let url = this.flags.url
+      let {url} = this.flags
       if (!url) {
         url = config.url
       }
 
       if (!url) {
         url = await input({
-          message: 'Enter SimpleLogin instance URL:',
           default: 'https://app.simplelogin.io',
-          validate: (value) => {
+          message: 'Enter SimpleLogin instance URL:',
+          validate(value) {
             if (!value) return 'URL is required'
             try {
-              new URL(value)
-              return true
+              return Boolean(new URL(value))
             } catch {
               return 'Please enter a valid URL'
             }
@@ -75,12 +75,12 @@ export default class Login extends BaseCommand<typeof Login> {
       url = url.replace(/\/$/, '')
 
       // Get or prompt for api key
-      let key = this.flags.key
+      let {key} = this.flags
       if (!key) {
         key = await password({
-          message: 'Enter your API key:',
           mask: '*',
-          validate: (value) => {
+          message: 'Enter your API key:',
+          validate(value) {
             if (!value) return 'API key is required'
             return true
           },
@@ -104,12 +104,12 @@ export default class Login extends BaseCommand<typeof Login> {
 
       if (format === 'json' || format === 'yaml') {
         this.output({
-          success: true,
           config: {
             apiKey: redactApiKey(key),
             url:basePath,
           },
-          data: info
+          data: info,
+          success: true
         })
       } else {
         this.log(`Hello ${info.name}! Your login was successful.`)

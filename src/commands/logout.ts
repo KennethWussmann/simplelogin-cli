@@ -1,18 +1,16 @@
-import {BaseCommand} from './base.js'
 import {writeConfig} from '../utils/config.js'
+import {BaseCommand} from './base.js'
 
 export default class Logout extends BaseCommand<typeof Logout> {
-  static override hidden = false
   static description = 'Remove API credentials from config'
-
   static examples = [
     '<%= config.bin %> <%= command.id %>',
     '<%= config.bin %> <%= command.id %> --format json',
   ]
-
-  static flags = {
+static flags = {
     ...BaseCommand.baseFlags,
   }
+static override hidden = false
 
   async run(): Promise<void> {
     try {

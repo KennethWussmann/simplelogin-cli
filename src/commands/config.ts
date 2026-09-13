@@ -1,24 +1,23 @@
 import {Flags} from '@oclif/core'
-import {BaseCommand} from './base.js'
+
 import {redactApiKey} from '../utils/config.js'
+import {BaseCommand} from './base.js'
 
 export default class Config extends BaseCommand<typeof Config> {
-  static override hidden = false
   static description = 'Display current configuration'
-
   static examples = [
     '<%= config.bin %> <%= command.id %>',
     '<%= config.bin %> <%= command.id %> --show-key',
     '<%= config.bin %> <%= command.id %> --format json',
   ]
-
-  static flags = {
+static flags = {
     ...BaseCommand.baseFlags,
     'show-key': Flags.boolean({
-      description: 'Show full API key (default: redacted)',
       default: false,
+      description: 'Show full API key (default: redacted)',
     }),
   }
+static override hidden = false
 
   async run(): Promise<void> {
     try {
@@ -30,10 +29,10 @@ export default class Config extends BaseCommand<typeof Config> {
 
       // Prepare display config
       const displayConfig = {
-        url: config.url || '(not set)',
         apiKey: config.apiKey
           ? (showKey ? config.apiKey : redactApiKey(config.apiKey))
           : '(not set)',
+        url: config.url || '(not set)',
       }
 
       if (format === 'json' || format === 'yaml') {

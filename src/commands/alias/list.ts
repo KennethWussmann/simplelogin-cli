@@ -1,11 +1,11 @@
-import {AliasListBase} from './alias-list-base.js'
 import type {AliasApi, AliasModelArray} from 'simplelogin-client'
 
-export default class AliasList extends AliasListBase {
-  static override hidden = false
-  static description = 'List all aliases with pagination'
+import {AliasListBase} from './alias-list-base.js'
 
-  static examples = [
+export default class AliasList extends AliasListBase {
+  static aliases = ['alias:ls']
+  static description = 'List all aliases with pagination'
+static examples = [
     '<%= config.bin %> <%= command.id %>',
     '<%= config.bin %> <%= command.id %> --page 1',
     '<%= config.bin %> <%= command.id %> --pinned',
@@ -14,23 +14,22 @@ export default class AliasList extends AliasListBase {
     '<%= config.bin %> <%= command.id %> --all',
     '<%= config.bin %> <%= command.id %> --format json',
   ]
-
-  static aliases = ['alias:ls']
-
-  public async run(): Promise<void> {
-    const {flags} = await this.parse(AliasList)
-    const format = (flags.format as 'plain' | 'json' | 'yaml') || 'plain'
-    await this.executeList(format, flags)
-  }
+static override hidden = false
 
   protected async fetchAliases(
     api: AliasApi,
     pageId: number,
-    filters: {pinned?: boolean; disabled?: boolean; enabled?: boolean}
+    filters: {disabled?: boolean; enabled?: boolean; pinned?: boolean;}
   ): Promise<AliasModelArray> {
     return api.getAliases({
       pageId,
       ...filters,
     })
+  }
+
+  public async run(): Promise<void> {
+    const {flags} = await this.parse(AliasList)
+    const format = (flags.format as 'json' | 'plain' | 'yaml') || 'plain'
+    await this.executeList(format, flags)
   }
 }

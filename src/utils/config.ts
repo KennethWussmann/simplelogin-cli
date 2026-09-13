@@ -1,11 +1,11 @@
-import {existsSync, mkdirSync, readFileSync, writeFileSync, chmodSync} from 'node:fs'
-import {dirname, join} from 'node:path'
+import {chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs'
 import {homedir} from 'node:os'
+import {dirname, join} from 'node:path'
 import YAML from 'yaml'
 
 export interface Config {
-  url?: string
   apiKey?: string
+  url?: string
 }
 
 export const DEFAULT_CONFIG_PATH = join(homedir(), '.config', 'simplelogin-cli', 'config.yaml')
@@ -46,7 +46,7 @@ export function writeConfig(config: Config, configPath?: string): void {
 
   // Create directory if it doesn't exist
   if (!existsSync(dir)) {
-    mkdirSync(dir, {recursive: true, mode: 0o700})
+    mkdirSync(dir, {mode: 0o700, recursive: true})
   }
 
   try {
@@ -63,6 +63,6 @@ export function writeConfig(config: Config, configPath?: string): void {
 /**
  * Redact an API key for display (show only first 8 characters)
  */
-export function redactApiKey(apiKey: string): string {
+export function redactApiKey(_apiKey: string): string {
   return "******"
 }

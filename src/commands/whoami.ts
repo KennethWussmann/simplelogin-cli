@@ -1,18 +1,16 @@
-import {BaseCommand} from './base.js'
 import {getAuthenticatedUser} from '../utils/simplelogin-client.js'
+import {BaseCommand} from './base.js'
 
 export default class Whoami extends BaseCommand<typeof Whoami> {
-  static override hidden = false
   static description = 'Check the authenticated user'
-
   static examples = [
     '<%= config.bin %> <%= command.id %>',
     '<%= config.bin %> <%= command.id %> --format json',
   ]
-
-  static flags = {
+static flags = {
     ...BaseCommand.baseFlags,
   }
+static override hidden = false
 
   async run(): Promise<void> {
     try {

@@ -1,35 +1,25 @@
-import {Command, Flags} from '@oclif/core'
-import {BaseCommand} from '../base.js'
-import {AliasApi} from 'simplelogin-client'
-import {getSimpleLoginConfig} from '../../utils/simplelogin-client.js'
 import type {Alias, AliasModelArray} from 'simplelogin-client'
+
+import {Command, Flags} from '@oclif/core'
+import {AliasApi} from 'simplelogin-client'
+import YAML from 'yaml'
+
+import {getSimpleLoginConfig} from '../../utils/simplelogin-client.js'
 
 /**
  * Abstract base class for alias list and search commands
  * Provides shared logic for pagination, filtering, and output formatting
  */
 export abstract class AliasListBase extends Command {
-  static hidden = true
-
   static flags = {
+    all: Flags.boolean({
+      default: false,
+      description: 'Fetch all pages automatically',
+    }),
     config: Flags.string({
-      description: 'Path to config file containing credentials',
       default: undefined,
+      description: 'Path to config file containing credentials',
       env: 'SIMPLELOGIN_CONFIG',
-    }),
-    format: Flags.string({
-      description: 'Output format',
-      options: ['plain', 'json', 'yaml'],
-      default: 'plain',
-    }),
-    page: Flags.integer({
-      description: 'Page number (20 aliases per page)',
-      default: 0,
-      min: 0,
-    }),
-    pinned: Flags.boolean({
-      description: 'Show only pinned aliases',
-      exclusive: ['disabled', 'enabled'],
     }),
     disabled: Flags.boolean({
       description: 'Show only disabled aliases',
@@ -39,10 +29,48 @@ export abstract class AliasListBase extends Command {
       description: 'Show only enabled aliases',
       exclusive: ['pinned', 'disabled'],
     }),
-    all: Flags.boolean({
-      description: 'Fetch all pages automatically',
-      default: false,
+    format: Flags.string({
+      default: 'plain',
+      description: 'Output format',
+      options: ['plain', 'json', 'yaml'],
     }),
+    page: Flags.integer({
+      default: 0,
+      description: 'Page number (20 aliases per page)',
+      min: 0,
+    }),
+    pinned: Flags.boolean({
+      description: 'Show only pinned aliases',
+      exclusive: ['disabled', 'enabled'],
+    }),
+  }
+static hidden = true
+
+  /**
+   * Main execution logic
+   */
+  protected async executeList(
+    format: 'json' | 'plain' | 'yaml',
+    flags: {all?: boolean; config?: string; disabled?: boolean; enabled?: boolean; page?: number; pinned?: boolean},
+  ): Promise<void> {
+    await this.requireAuth(flags.config)
+
+    const config = await getSimpleLoginConfig(flags.config)
+    const api = new AliasApi(config)
+
+    // Build filter object
+    const filters: {disabled?: boolean; enabled?: boolean; pinned?: boolean;} = {}
+    if (flags.pinned) filters.pinned = true
+    if (flags.disabled) filters.disabled = true
+    if (flags.enabled) filters.enabled = true
+
+    const currentPage = flags.page ?? 0
+    const allAliases: Alias[] = flags.all
+      ? await this.fetchAllAliases(api, currentPage, filters, format)
+      : (await this.fetchAliases(api, currentPage, filters)).aliases || []
+
+    // Output results
+    this.outputAliases(allAliases, format)
   }
 
   /**
@@ -51,30 +79,13 @@ export abstract class AliasListBase extends Command {
   protected abstract fetchAliases(
     api: AliasApi,
     pageId: number,
-    filters: {pinned?: boolean; disabled?: boolean; enabled?: boolean}
+    filters: {disabled?: boolean; enabled?: boolean; pinned?: boolean;}
   ): Promise<AliasModelArray>
-
-  /**
-   * Get the output format from flags
-   */
-  protected getFormat(): 'plain' | 'json' | 'yaml' {
-    const format = (this.parse().then(p => p.flags.format).catch(() => 'plain'))
-    return 'plain' // Will be overridden in actual implementation
-  }
-
-  /**
-   * Require authentication for this command
-   */
-  protected async requireAuth(configPath?: string): Promise<void> {
-    // Import and use the requireAuth from simplelogin-client utils
-    const {requireAuth} = await import('../../utils/simplelogin-client.js')
-    await requireAuth(configPath)
-  }
 
   /**
    * Output data in the appropriate format
    */
-  protected outputData(data: unknown, format: 'plain' | 'json' | 'yaml'): void {
+  protected outputData(data: unknown, format: 'json' | 'plain' | 'yaml'): void {
     switch (format) {
       case 'json': {
         this.log(JSON.stringify(data, null, 2))
@@ -82,12 +93,10 @@ export abstract class AliasListBase extends Command {
       }
 
       case 'yaml': {
-        const YAML = require('yaml')
         this.log(YAML.stringify(data))
         break
       }
 
-      case 'plain':
       default: {
         if (typeof data === 'string') {
           this.log(data)
@@ -101,56 +110,39 @@ export abstract class AliasListBase extends Command {
   }
 
   /**
-   * Main execution logic
+   * Require authentication for this command
    */
-  protected async executeList(format: 'plain' | 'json' | 'yaml', flags: any): Promise<void> {
-    await this.requireAuth(flags.config as string | undefined)
+  protected async requireAuth(configPath?: string): Promise<void> {
+    // Import and use the requireAuth from simplelogin-client utils
+    const {requireAuth} = await import('../../utils/simplelogin-client.js')
+    await requireAuth(configPath)
+  }
 
-    const config = await getSimpleLoginConfig(flags.config as string | undefined)
-    const api = new AliasApi(config)
-
-    // Build filter object
-    const filters: {pinned?: boolean; disabled?: boolean; enabled?: boolean} = {}
-    if (flags.pinned) filters.pinned = true
-    if (flags.disabled) filters.disabled = true
-    if (flags.enabled) filters.enabled = true
-
-    let allAliases: Alias[] = []
-    let currentPage = flags.page as number
-
-    if (flags.all) {
-      // Fetch all pages
-      let hasMore = true
-      while (hasMore) {
-        if (format === 'plain') {
-          this.log(`Fetching page ${currentPage}...`)
-        }
-
-        const result = await this.fetchAliases(api, currentPage, filters)
-        const aliases = result.aliases || []
-        allAliases.push(...aliases)
-
-        // If we got less than 20 items, we're done
-        if (aliases.length < 20) {
-          hasMore = false
-        } else {
-          currentPage++
-        }
-      }
-    } else {
-      // Fetch single page
-      const result = await this.fetchAliases(api, currentPage, filters)
-      allAliases = result.aliases || []
+  private async fetchAllAliases(
+    api: AliasApi,
+    pageId: number,
+    filters: {disabled?: boolean; enabled?: boolean; pinned?: boolean},
+    format: 'json' | 'plain' | 'yaml',
+  ): Promise<Alias[]> {
+    if (format === 'plain') {
+      this.log(`Fetching page ${pageId}...`)
     }
 
-    // Output results
-    this.outputAliases(allAliases, format)
+    const result = await this.fetchAliases(api, pageId, filters)
+    const aliases = result.aliases || []
+
+    // If we got less than 20 items, we're done
+    if (aliases.length < 20) {
+      return aliases
+    }
+
+    return [...aliases, ...(await this.fetchAllAliases(api, pageId + 1, filters, format))]
   }
 
   /**
    * Format and output aliases based on output format
    */
-  private outputAliases(aliases: Alias[], format: 'plain' | 'json' | 'yaml'): void {
+  private outputAliases(aliases: Alias[], format: 'json' | 'plain' | 'yaml'): void {
     if (format === 'json' || format === 'yaml') {
       // Return structured data
       this.outputData(aliases, format)

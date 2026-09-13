@@ -1,51 +1,31 @@
 import {Command, Flags, Interfaces} from '@oclif/core'
 import YAML from 'yaml'
-import {readConfig, Config, getConfigPath} from '../utils/config.js'
+
+import {Config, getConfigPath, readConfig} from '../utils/config.js'
 import { isAuthenticated } from '../utils/simplelogin-client.js'
 
-export type OutputFormat = 'plain' | 'json' | 'yaml'
+export type OutputFormat = 'json' | 'plain' | 'yaml'
 
 export type Flags<T extends typeof Command> = Interfaces.InferredFlags<(typeof BaseCommand)['baseFlags'] & T['flags']>
 export type Args<T extends typeof Command> = Interfaces.InferredArgs<T['args']>
 
 export abstract class BaseCommand<T extends typeof Command> extends Command {
-  // Disable this from being a runnable command
-  static hidden = true
-
   static baseFlags = {
     config: Flags.string({
-      description: 'Path to config file containing credentials',
       default: undefined,
+      description: 'Path to config file containing credentials',
       env: 'SIMPLELOGIN_CONFIG',
     }),
     format: Flags.string({
+      default: 'plain',
       description: 'Output format',
       options: ['plain', 'json', 'yaml'],
-      default: 'plain',
     }),
   }
-
+// Disable this from being a runnable command
+  static hidden = true
+protected args!: Args<T>
   protected flags!: Flags<T>
-  protected args!: Args<T>
-
-  public async init(): Promise<void> {
-    await super.init()
-    const {args, flags} = await this.parse({
-      flags: this.ctor.flags,
-      baseFlags: (super.ctor as typeof BaseCommand).baseFlags,
-      args: this.ctor.args,
-      strict: this.ctor.strict,
-    })
-    this.flags = flags as Flags<T>
-    this.args = args as Args<T>
-  }
-
-  /**
-   * Get the output format from flags
-   */
-  protected getFormat(): OutputFormat {
-    return (this.flags.format as OutputFormat) || 'plain'
-  }
 
   /**
    * Get the config file path from flags
@@ -55,10 +35,22 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
   }
 
   /**
-   * Read the configuration file
+   * Get the output format from flags
    */
-  protected readConfig(): Config {
-    return readConfig(this.flags.config as string | undefined)
+  protected getFormat(): OutputFormat {
+    return (this.flags.format as OutputFormat) || 'plain'
+  }
+
+  public async init(): Promise<void> {
+    await super.init()
+    const {args, flags} = await this.parse({
+      args: this.ctor.args,
+      baseFlags: (super.ctor as typeof BaseCommand).baseFlags,
+      flags: this.ctor.flags,
+      strict: this.ctor.strict,
+    })
+    this.flags = flags as Flags<T>
+    this.args = args as Args<T>
   }
 
   /**
@@ -78,7 +70,6 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
         break
       }
 
-      case 'plain':
       default: {
         // For plain format, data should be a string
         if (typeof data === 'string') {
@@ -100,16 +91,23 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
 
     if (format === 'json' || format === 'yaml') {
       const errorData = {
-        success: false,
         error: {
           code: code || 'ERROR',
           message,
         },
+        success: false,
       }
       this.output(errorData)
     } else {
       this.error(message)
     }
+  }
+
+  /**
+   * Read the configuration file
+   */
+  protected readConfig(): Config {
+    return readConfig(this.flags.config as string | undefined)
   }
 
   /**

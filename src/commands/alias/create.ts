@@ -1,11 +1,11 @@
+import type {Alias, AliasApi} from 'simplelogin-client'
+
 import {Flags} from '@oclif/core'
+
 import {AliasCreateBase} from './alias-create-base.js'
-import type {AliasApi, Alias} from 'simplelogin-client'
 
 export default class AliasCreate extends AliasCreateBase {
-  static override hidden = false
   static description = 'Create a new random alias'
-
   static examples = [
     '<%= config.bin %> <%= command.id %>',
     '<%= config.bin %> <%= command.id %> --note "My test alias"',
@@ -13,24 +13,18 @@ export default class AliasCreate extends AliasCreateBase {
     '<%= config.bin %> <%= command.id %> --mode uuid',
     '<%= config.bin %> <%= command.id %> --mode word --note "Shopping" --format json',
   ]
-
-  static flags = {
+static flags = {
     ...AliasCreateBase.flags,
     mode: Flags.string({
       description: 'Generation mode (uuid or word-based)',
       options: ['uuid', 'word'],
     }),
   }
-
-  public async run(): Promise<void> {
-    const {flags} = await this.parse(AliasCreate)
-    const format = (flags.format as 'plain' | 'json' | 'yaml') || 'plain'
-    await this.executeCreate(format, flags)
-  }
+static override hidden = false
 
   protected async createAlias(
     api: AliasApi,
-    params: {note?: string; hostname?: string}
+    params: {hostname?: string; note?: string;}
   ): Promise<Alias> {
     const {flags} = await this.parse(AliasCreate)
 
@@ -41,5 +35,11 @@ export default class AliasCreate extends AliasCreateBase {
       hostname: params.hostname,
       mode: flags.mode as 'uuid' | 'word' | undefined,
     })
+  }
+
+  public async run(): Promise<void> {
+    const {flags} = await this.parse(AliasCreate)
+    const format = (flags.format as 'json' | 'plain' | 'yaml') || 'plain'
+    await this.executeCreate(format, flags)
   }
 }

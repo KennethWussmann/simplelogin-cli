@@ -1,37 +1,33 @@
+import {confirm} from '@inquirer/prompts'
 import {Args, Flags} from '@oclif/core'
-import {BaseCommand} from '../base.js'
 import {AliasApi} from 'simplelogin-client'
+
 import {getSimpleLoginConfig} from '../../utils/simplelogin-client.js'
-import * as readline from 'node:readline/promises'
-import {stdin as input, stdout as output} from 'node:process'
+import {BaseCommand} from '../base.js'
 
 export default class AliasDelete extends BaseCommand<typeof AliasDelete> {
-  static override hidden = false
-  static description = 'Delete an alias by ID'
-
-  static examples = [
-    '<%= config.bin %> <%= command.id %> 123',
-    '<%= config.bin %> <%= command.id %> 123 --confirm',
-    '<%= config.bin %> <%= command.id %> 123 --format json',
-    '<%= config.bin %> alias rm 123 --confirm',
-  ]
-
   static aliases = ['alias:rm']
-
   static args = {
     'alias-id': Args.integer({
       description: 'Alias ID to delete',
       required: true,
     }),
   }
-
-  static flags = {
+static description = 'Delete an alias by ID'
+static examples = [
+    '<%= config.bin %> <%= command.id %> 123',
+    '<%= config.bin %> <%= command.id %> 123 --confirm',
+    '<%= config.bin %> <%= command.id %> 123 --format json',
+    '<%= config.bin %> alias rm 123 --confirm',
+  ]
+static flags = {
     ...BaseCommand.baseFlags,
     confirm: Flags.boolean({
-      description: 'Skip confirmation prompt',
       default: false,
+      description: 'Skip confirmation prompt',
     }),
   }
+static override hidden = false
 
   async run(): Promise<void> {
     try {
@@ -45,11 +41,12 @@ export default class AliasDelete extends BaseCommand<typeof AliasDelete> {
 
       // If not confirmed, prompt for confirmation (skip in json/yaml mode)
       if (!shouldConfirm && format === 'plain') {
-        const rl = readline.createInterface({input, output})
-        const answer = await rl.question(`Are you sure you want to delete alias ${aliasId}? (y/N): `)
-        rl.close()
+        const confirmed = await confirm({
+          default: false,
+          message: `Are you sure you want to delete alias ${aliasId}?`,
+        })
 
-        if (answer.toLowerCase() !== 'y' && answer.toLowerCase() !== 'yes') {
+        if (!confirmed) {
           this.log('Deletion cancelled.')
           return
         }
@@ -67,8 +64,8 @@ export default class AliasDelete extends BaseCommand<typeof AliasDelete> {
       // Output result
       if (format === 'json' || format === 'yaml') {
         this.output({
-          success: true,
           deleted: result.deleted || true,
+          success: true,
         })
       } else {
         this.log(`Alias ${aliasId} deleted successfully.`)

@@ -1,13 +1,18 @@
 import {Args, Flags} from '@oclif/core'
-import {BaseCommand} from '../base.js'
 import {AliasApi} from 'simplelogin-client'
+
 import {getSimpleLoginConfig} from '../../utils/simplelogin-client.js'
+import {BaseCommand} from '../base.js'
 
 export default class AliasUpdate extends BaseCommand<typeof AliasUpdate> {
-  static override hidden = false
+  static args = {
+    'alias-id': Args.integer({
+      description: 'Alias ID',
+      required: true,
+    }),
+  }
   static description = 'Update alias settings'
-
-  static examples = [
+static examples = [
     '<%= config.bin %> <%= command.id %> 123 --note "Updated note"',
     '<%= config.bin %> <%= command.id %> 123 --name "My Alias"',
     '<%= config.bin %> <%= command.id %> 123 --mailbox-id 456',
@@ -16,21 +21,10 @@ export default class AliasUpdate extends BaseCommand<typeof AliasUpdate> {
     '<%= config.bin %> <%= command.id %> 123 --disable-pgp',
     '<%= config.bin %> <%= command.id %> 123 --note "Shopping" --pinned --format json',
   ]
-
-  static args = {
-    'alias-id': Args.integer({
-      description: 'Alias ID',
-      required: true,
-    }),
-  }
-
-  static flags = {
+static flags = {
     ...BaseCommand.baseFlags,
-    note: Flags.string({
-      description: 'Update note',
-    }),
-    name: Flags.string({
-      description: 'Update display name',
+    'disable-pgp': Flags.boolean({
+      description: 'Disable/enable PGP',
     }),
     'mailbox-id': Flags.integer({
       description: 'Change primary mailbox',
@@ -38,13 +32,17 @@ export default class AliasUpdate extends BaseCommand<typeof AliasUpdate> {
     'mailbox-ids': Flags.string({
       description: 'Comma-separated mailbox IDs',
     }),
+    name: Flags.string({
+      description: 'Update display name',
+    }),
+    note: Flags.string({
+      description: 'Update note',
+    }),
     pinned: Flags.boolean({
       description: 'Pin/unpin alias',
     }),
-    'disable-pgp': Flags.boolean({
-      description: 'Disable/enable PGP',
-    }),
   }
+static override hidden = false
 
   async run(): Promise<void> {
     try {
@@ -78,12 +76,12 @@ export default class AliasUpdate extends BaseCommand<typeof AliasUpdate> {
 
       // Build update payload
       const updatePayload: {
-        note?: string
-        name?: string
+        disablePgp?: boolean
         mailboxId?: number
         mailboxIds?: number[]
+        name?: string
+        note?: string
         pinned?: boolean
-        disablePgp?: boolean
       } = {}
 
       if (flags.note !== undefined) {
@@ -113,8 +111,8 @@ export default class AliasUpdate extends BaseCommand<typeof AliasUpdate> {
 
       // Update the alias
       await api.updateAlias({
-        aliasId,
         aliasAliasIdPatch: updatePayload,
+        aliasId,
       })
 
       // Output result
