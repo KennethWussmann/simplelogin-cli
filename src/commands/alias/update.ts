@@ -11,6 +11,7 @@ export default class AliasUpdate extends BaseCommand<typeof AliasUpdate> {
       required: true,
     }),
   }
+
   static description = 'Update alias settings'
 static examples = [
     '<%= config.bin %> <%= command.id %> 123 --note "Updated note"',
@@ -21,6 +22,7 @@ static examples = [
     '<%= config.bin %> <%= command.id %> 123 --disable-pgp',
     '<%= config.bin %> <%= command.id %> 123 --note "Shopping" --pinned --format json',
   ]
+
 static flags = {
     ...BaseCommand.baseFlags,
     'disable-pgp': Flags.boolean({
@@ -42,12 +44,13 @@ static flags = {
       description: 'Pin/unpin alias',
     }),
   }
+
 static override hidden = false
 
   async run(): Promise<void> {
     try {
       const {args, flags} = await this.parse(AliasUpdate)
-      const aliasId = args['alias-id'] as number
+      const aliasId = args['alias-id']
       const format = this.getFormat()
 
       // Validate that at least one optional parameter is provided
@@ -68,10 +71,10 @@ static override hidden = false
       }
 
       // Require authentication
-      await this.requireAuth(flags.config as string | undefined)
+      await this.requireAuth(flags.config)
 
       // Initialize API client
-      const config = await getSimpleLoginConfig(flags.config as string | undefined)
+      const config = await getSimpleLoginConfig(flags.config)
       const api = new AliasApi(config)
 
       // Build update payload
@@ -85,28 +88,28 @@ static override hidden = false
       } = {}
 
       if (flags.note !== undefined) {
-        updatePayload.note = flags.note as string
+        updatePayload.note = flags.note
       }
 
       if (flags.name !== undefined) {
-        updatePayload.name = flags.name as string
+        updatePayload.name = flags.name
       }
 
       if (flags['mailbox-id'] !== undefined) {
-        updatePayload.mailboxId = flags['mailbox-id'] as number
+        updatePayload.mailboxId = flags['mailbox-id']
       }
 
       if (flags['mailbox-ids'] !== undefined) {
-        const mailboxIdsStr = flags['mailbox-ids'] as string
-        updatePayload.mailboxIds = mailboxIdsStr.split(',').map(id => Number.parseInt(id.trim(), 10))
+        const mailboxIdsStr = flags['mailbox-ids']
+        updatePayload.mailboxIds = mailboxIdsStr.split(',').map(id => Number(id.trim()))
       }
 
       if (flags.pinned !== undefined) {
-        updatePayload.pinned = flags.pinned as boolean
+        updatePayload.pinned = flags.pinned
       }
 
       if (flags['disable-pgp'] !== undefined) {
-        updatePayload.disablePgp = flags['disable-pgp'] as boolean
+        updatePayload.disablePgp = flags['disable-pgp']
       }
 
       // Update the alias

@@ -7,9 +7,11 @@ export default class Whoami extends BaseCommand<typeof Whoami> {
     '<%= config.bin %> <%= command.id %>',
     '<%= config.bin %> <%= command.id %> --format json',
   ]
+
 static flags = {
     ...BaseCommand.baseFlags,
   }
+
 static override hidden = false
 
   async run(): Promise<void> {

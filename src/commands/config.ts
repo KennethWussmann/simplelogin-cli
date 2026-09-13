@@ -10,6 +10,7 @@ export default class Config extends BaseCommand<typeof Config> {
     '<%= config.bin %> <%= command.id %> --show-key',
     '<%= config.bin %> <%= command.id %> --format json',
   ]
+
 static flags = {
     ...BaseCommand.baseFlags,
     'show-key': Flags.boolean({
@@ -17,6 +18,7 @@ static flags = {
       description: 'Show full API key (default: redacted)',
     }),
   }
+
 static override hidden = false
 
   async run(): Promise<void> {
@@ -25,14 +27,14 @@ static override hidden = false
       const config = this.readConfig()
       const configPath = this.getConfigPath()
       const format = this.getFormat()
-      const showKey = this.flags['show-key'] as boolean
+      const isShowKey = this.flags['show-key']
 
       // Prepare display config
       const displayConfig = {
         apiKey: config.apiKey
-          ? (showKey ? config.apiKey : redactApiKey(config.apiKey))
+          ? (isShowKey ? config.apiKey : redactApiKey(config.apiKey))
           : '(not set)',
-        url: config.url || '(not set)',
+        url: config.url ?? '(not set)',
       }
 
       if (format === 'json' || format === 'yaml') {

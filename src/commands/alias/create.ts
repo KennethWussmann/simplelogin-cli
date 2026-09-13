@@ -13,6 +13,7 @@ export default class AliasCreate extends AliasCreateBase {
     '<%= config.bin %> <%= command.id %> --mode uuid',
     '<%= config.bin %> <%= command.id %> --mode word --note "Shopping" --format json',
   ]
+
 static flags = {
     ...AliasCreateBase.flags,
     mode: Flags.string({
@@ -20,6 +21,7 @@ static flags = {
       options: ['uuid', 'word'],
     }),
   }
+
 static override hidden = false
 
   protected async createAlias(

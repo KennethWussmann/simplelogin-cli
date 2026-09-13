@@ -1,5 +1,5 @@
 import {Command, Flags} from '@oclif/core'
-import {AliasApi, AliasOptions} from 'simplelogin-client'
+import {AliasApi, type AliasOptions} from 'simplelogin-client'
 import YAML from 'yaml'
 
 import {getSimpleLoginConfig} from '../../utils/simplelogin-client.js'
@@ -16,6 +16,7 @@ export default class AliasOptionsCommand extends Command {
     '<%= config.bin %> <%= command.id %> --custom --domain mydomain.com',
     '<%= config.bin %> <%= command.id %> --format json',
   ]
+
 static flags = {
     config: Flags.string({
       default: undefined,
@@ -43,6 +44,7 @@ static flags = {
       description: 'Filter options for premium ones',
     }),
   }
+
 static override hidden = false
 
   /**
@@ -55,18 +57,18 @@ static override hidden = false
         break
       }
 
-      case 'yaml': {
-        this.log(YAML.stringify(data))
-        break
-      }
-
-      default: {
+      case 'plain': {
         if (typeof data === 'string') {
           this.log(data)
         } else {
           this.log(JSON.stringify(data, null, 2))
         }
 
+        break
+      }
+
+      case 'yaml': {
+        this.log(YAML.stringify(data))
         break
       }
     }
@@ -99,10 +101,9 @@ static override hidden = false
       this.outputData(options, format)
     } else {
       // Plain format - display key details
-      const lines = ['Alias Options']
+      const lines = ['Alias Options', `Can Create: ${options.canCreate ? 'Yes' : 'No'}`, `\nPrefix Suggestion: ${options.prefixSuggestion}`]
 
       // Show whether user can create new aliases
-      lines.push(`Can Create: ${options.canCreate ? 'Yes' : 'No'}`, `\nPrefix Suggestion: ${options.prefixSuggestion}`)
 
       // Show available suffixes
       if (options.suffixes && options.suffixes.length > 0) {
@@ -136,15 +137,15 @@ static override hidden = false
 
     try {
       // Require authentication
-      await this.requireAuth(flags.config as string | undefined)
+      await this.requireAuth(flags.config)
 
       // Get API client
-      const config = await getSimpleLoginConfig(flags.config as string | undefined)
+      const config = await getSimpleLoginConfig(flags.config)
       const api = new AliasApi(config)
 
       // Fetch alias options
       let options = await api.getAliasOptions({
-        hostname: flags.hostname as string | undefined,
+        hostname: flags.hostname,
       })
 
       // Apply client-side filtering
@@ -152,18 +153,18 @@ static override hidden = false
 
       // Filter by domain if specified
       if (flags.domain) {
-        const domainFilter = flags.domain as string
+        const domainFilter = flags.domain
         filteredSuffixes = filteredSuffixes.filter((suffix) => suffix.suffix.endsWith(`@${domainFilter}`))
       }
 
       // Filter by custom if specified
       if (flags.custom) {
-        filteredSuffixes = filteredSuffixes.filter((suffix) => suffix.isCustom === true)
+        filteredSuffixes = filteredSuffixes.filter((suffix) => suffix.isCustom)
       }
 
       // Filter by premium if specified
       if (flags.premium) {
-        filteredSuffixes = filteredSuffixes.filter((suffix) => suffix.isPremium === true)
+        filteredSuffixes = filteredSuffixes.filter((suffix) => suffix.isPremium)
       }
 
       // Filter by prefix if specified

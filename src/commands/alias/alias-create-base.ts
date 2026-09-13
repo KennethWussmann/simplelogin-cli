@@ -1,7 +1,5 @@
-import type {Alias, Mailbox} from 'simplelogin-client'
-
 import {Command, Flags} from '@oclif/core'
-import {AliasApi, MailboxApi} from 'simplelogin-client'
+import {type Alias, AliasApi,type Mailbox, MailboxApi} from 'simplelogin-client'
 import YAML from 'yaml'
 
 import {getSimpleLoginConfig} from '../../utils/simplelogin-client.js'
@@ -29,6 +27,7 @@ export abstract class AliasCreateBase extends Command {
       description: 'Note/description for the alias',
     }),
   }
+
 static hidden = true
 
   /**
@@ -120,18 +119,18 @@ static hidden = true
         break
       }
 
-      case 'yaml': {
-        this.log(YAML.stringify(data))
-        break
-      }
-
-      default: {
+      case 'plain': {
         if (typeof data === 'string') {
           this.log(data)
         } else {
           this.log(JSON.stringify(data, null, 2))
         }
 
+        break
+      }
+
+      case 'yaml': {
+        this.log(YAML.stringify(data))
         break
       }
     }

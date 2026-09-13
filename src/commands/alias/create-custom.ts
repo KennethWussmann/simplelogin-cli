@@ -15,6 +15,7 @@ export default class AliasCreateCustom extends AliasCreateBase {
       required: true,
     }),
   }
+
 static description = 'Create a custom alias with specific prefix and suffix'
 static examples = [
     '<%= config.bin %> <%= command.id %> myprefix signed_suffix --mailbox-ids 1,2',
@@ -22,6 +23,7 @@ static examples = [
     '<%= config.bin %> <%= command.id %> support suffix456 --mailbox-ids 1 --name "Support" --hostname example.com',
     '<%= config.bin %> <%= command.id %> custom suffix789 --mailbox-ids 1,2,3 --format json',
   ]
+
 static flags = {
     ...AliasCreateBase.flags,
     'mailbox-ids': Flags.string({
@@ -31,6 +33,7 @@ static flags = {
       description: 'Display name',
     }),
   }
+
 static override hidden = false
 private mailboxIds!: number[]
   private name?: string
@@ -58,15 +61,15 @@ private mailboxIds!: number[]
     const format = (flags.format as 'json' | 'plain' | 'yaml') || 'plain'
 
     // Store args and additional flags for use in createAlias
-    this.prefix = args.prefix as string
-    this.suffix = args.suffix as string
-    this.name = flags.name as string | undefined
+    this.prefix = args.prefix
+    this.suffix = args.suffix
+    this.name = flags.name
 
     // Parse mailbox IDs
     try {
       const mailboxIdStr = flags['mailbox-ids']
       this.mailboxIds = mailboxIdStr ? mailboxIdStr.split(',').map(id => {
-          const parsed = Number.parseInt(id.trim(), 10)
+          const parsed = Number(id.trim())
           if (Number.isNaN(parsed)) {
             throw new TypeError(`Invalid mailbox ID: ${id}`)
           }

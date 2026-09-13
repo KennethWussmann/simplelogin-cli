@@ -1,9 +1,9 @@
 
-import { AccountApi, SimpleLoginConfig, UserInfo } from 'simplelogin-client'
+import { AccountApi, SimpleLoginConfig, type UserInfo } from 'simplelogin-client'
 
 import { readConfig } from './config.js'
 
-let simpleLoginConfig: null | SimpleLoginConfig = null
+let simpleLoginConfig: SimpleLoginConfig | undefined
 
 
 export async function getSimpleLoginConfig(configPath?: string): Promise<SimpleLoginConfig> {
@@ -23,13 +23,13 @@ export async function getSimpleLoginConfig(configPath?: string): Promise<SimpleL
   return simpleLoginConfig
 }
 
-export async function getAuthenticatedUser(configPath?: string): Promise<null| UserInfo> {
+export async function getAuthenticatedUser(configPath?: string): Promise<undefined| UserInfo> {
     try {
         const client = new AccountApi(await getSimpleLoginConfig(configPath))
         return await client.getUserInfo()
     } catch (error) {
         console.error(error)
-        return null
+        return undefined
     }
 } 
 
@@ -37,11 +37,7 @@ export async function getAuthenticatedUser(configPath?: string): Promise<null| U
 export async function isAuthenticated(configPath?: string): Promise<boolean> {
     try {
         const user = await getAuthenticatedUser(configPath)
-        if (user) {
-            return true
-        }
-
-        return false
+        return Boolean(user);
     } catch {
         return false
     }

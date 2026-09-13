@@ -1,7 +1,5 @@
-import type {Alias, AliasModelArray} from 'simplelogin-client'
-
 import {Command, Flags} from '@oclif/core'
-import {AliasApi} from 'simplelogin-client'
+import {type Alias, AliasApi,type AliasModelArray} from 'simplelogin-client'
 import YAML from 'yaml'
 
 import {getSimpleLoginConfig} from '../../utils/simplelogin-client.js'
@@ -44,6 +42,7 @@ export abstract class AliasListBase extends Command {
       exclusive: ['disabled', 'enabled'],
     }),
   }
+
 static hidden = true
 
   /**
@@ -67,7 +66,7 @@ static hidden = true
     const currentPage = flags.page ?? 0
     const allAliases: Alias[] = flags.all
       ? await this.fetchAllAliases(api, currentPage, filters, format)
-      : (await this.fetchAliases(api, currentPage, filters)).aliases || []
+      : (await this.fetchAliases(api, currentPage, filters)).aliases ?? []
 
     // Output results
     this.outputAliases(allAliases, format)
@@ -82,43 +81,7 @@ static hidden = true
     filters: {disabled?: boolean; enabled?: boolean; pinned?: boolean;}
   ): Promise<AliasModelArray>
 
-  /**
-   * Output data in the appropriate format
-   */
-  protected outputData(data: unknown, format: 'json' | 'plain' | 'yaml'): void {
-    switch (format) {
-      case 'json': {
-        this.log(JSON.stringify(data, null, 2))
-        break
-      }
-
-      case 'yaml': {
-        this.log(YAML.stringify(data))
-        break
-      }
-
-      default: {
-        if (typeof data === 'string') {
-          this.log(data)
-        } else {
-          this.log(JSON.stringify(data, null, 2))
-        }
-
-        break
-      }
-    }
-  }
-
-  /**
-   * Require authentication for this command
-   */
-  protected async requireAuth(configPath?: string): Promise<void> {
-    // Import and use the requireAuth from simplelogin-client utils
-    const {requireAuth} = await import('../../utils/simplelogin-client.js')
-    await requireAuth(configPath)
-  }
-
-  private async fetchAllAliases(
+  protected async fetchAllAliases(
     api: AliasApi,
     pageId: number,
     filters: {disabled?: boolean; enabled?: boolean; pinned?: boolean},
@@ -129,7 +92,7 @@ static hidden = true
     }
 
     const result = await this.fetchAliases(api, pageId, filters)
-    const aliases = result.aliases || []
+    const aliases = result.aliases ?? []
 
     // If we got less than 20 items, we're done
     if (aliases.length < 20) {
@@ -142,7 +105,7 @@ static hidden = true
   /**
    * Format and output aliases based on output format
    */
-  private outputAliases(aliases: Alias[], format: 'json' | 'plain' | 'yaml'): void {
+  protected outputAliases(aliases: Alias[], format: 'json' | 'plain' | 'yaml'): void {
     if (format === 'json' || format === 'yaml') {
       // Return structured data
       this.outputData(aliases, format)
@@ -176,5 +139,41 @@ static hidden = true
       this.log('')
       this.log(`Total: ${aliases.length} alias${aliases.length === 1 ? '' : 'es'}`)
     }
+  }
+
+  /**
+   * Output data in the appropriate format
+   */
+  protected outputData(data: unknown, format: 'json' | 'plain' | 'yaml'): void {
+    switch (format) {
+      case 'json': {
+        this.log(JSON.stringify(data, null, 2))
+        break
+      }
+
+      case 'plain': {
+        if (typeof data === 'string') {
+          this.log(data)
+        } else {
+          this.log(JSON.stringify(data, null, 2))
+        }
+
+        break
+      }
+
+      case 'yaml': {
+        this.log(YAML.stringify(data))
+        break
+      }
+    }
+  }
+
+  /**
+   * Require authentication for this command
+   */
+  protected async requireAuth(configPath?: string): Promise<void> {
+    // Import and use the requireAuth from simplelogin-client utils
+    const {requireAuth} = await import('../../utils/simplelogin-client.js')
+    await requireAuth(configPath)
   }
 }

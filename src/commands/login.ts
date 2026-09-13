@@ -13,6 +13,7 @@ export default class Login extends BaseCommand<typeof Login> {
     '<%= config.bin %> <%= command.id %> --url https://app.simplelogin.io',
     '<%= config.bin %> <%= command.id %> --key api-key',
   ]
+
 static flags = {
     ...BaseCommand.baseFlags,
     device: Flags.string({
@@ -26,6 +27,7 @@ static flags = {
       description: 'SimpleLogin instance URL (e.g., https://app.simplelogin.io)',
     }),
   }
+
 static override hidden = false
 
   async run(): Promise<void> {
@@ -52,40 +54,34 @@ static override hidden = false
     try {
       // Get or prompt for URL
       let {url} = this.flags
-      if (!url) {
-        url = config.url
-      }
+      url ??= config.url
 
-      if (!url) {
-        url = await input({
-          default: 'https://app.simplelogin.io',
-          message: 'Enter SimpleLogin instance URL:',
-          validate(value) {
-            if (!value) return 'URL is required'
-            try {
-              return Boolean(new URL(value))
-            } catch {
-              return 'Please enter a valid URL'
-            }
-          },
-        })
-      }
+      url ??= await input({
+        default: 'https://app.simplelogin.io',
+        message: 'Enter SimpleLogin instance URL:',
+        validate(value) {
+          if (!value) return 'URL is required'
+          try {
+            return Boolean(new URL(value))
+          } catch {
+            return 'Please enter a valid URL'
+          }
+        },
+      })
 
       // Ensure URL doesn't end with trailing slash
-      url = url.replace(/\/$/, '')
+      url = url.endsWith('/') ? url.slice(0, -1) : url
 
       // Get or prompt for api key
       let {key} = this.flags
-      if (!key) {
-        key = await password({
-          mask: '*',
-          message: 'Enter your API key:',
-          validate(value) {
-            if (!value) return 'API key is required'
-            return true
-          },
-        })
-      }
+      key ??= await password({
+        mask: '*',
+        message: 'Enter your API key:',
+        validate(value) {
+          if (!value) return 'API key is required'
+          return true
+        },
+      })
 
       const basePath = `${url}/api`
       const slConfig = new SimpleLoginConfig({ apiKey: key, basePath })

@@ -1,7 +1,7 @@
-import {Command, Flags, Interfaces} from '@oclif/core'
+import {Command, Flags, type Interfaces} from '@oclif/core'
 import YAML from 'yaml'
 
-import {Config, getConfigPath, readConfig} from '../utils/config.js'
+import {type Config, getConfigPath, readConfig} from '../utils/config.js'
 import { isAuthenticated } from '../utils/simplelogin-client.js'
 
 export type OutputFormat = 'json' | 'plain' | 'yaml'
@@ -22,6 +22,7 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
       options: ['plain', 'json', 'yaml'],
     }),
   }
+
 // Disable this from being a runnable command
   static hidden = true
 protected args!: Args<T>
@@ -31,7 +32,7 @@ protected args!: Args<T>
    * Get the config file path from flags
    */
   protected getConfigPath(): string {
-    return getConfigPath(this.flags.config as string | undefined)
+    return getConfigPath(this.flags.config)
   }
 
   /**
@@ -65,12 +66,7 @@ protected args!: Args<T>
         break
       }
 
-      case 'yaml': {
-        this.log(YAML.stringify(data))
-        break
-      }
-
-      default: {
+      case 'plain': {
         // For plain format, data should be a string
         if (typeof data === 'string') {
           this.log(data)
@@ -78,6 +74,11 @@ protected args!: Args<T>
           this.log(JSON.stringify(data, null, 2))
         }
 
+        break
+      }
+
+      case 'yaml': {
+        this.log(YAML.stringify(data))
         break
       }
     }
@@ -92,7 +93,7 @@ protected args!: Args<T>
     if (format === 'json' || format === 'yaml') {
       const errorData = {
         error: {
-          code: code || 'ERROR',
+          code: code ?? 'ERROR',
           message,
         },
         success: false,
@@ -107,7 +108,7 @@ protected args!: Args<T>
    * Read the configuration file
    */
   protected readConfig(): Config {
-    return readConfig(this.flags.config as string | undefined)
+    return readConfig(this.flags.config)
   }
 
   /**
@@ -115,9 +116,11 @@ protected args!: Args<T>
    * Throws an error if not authenticated
    */
   protected async requireAuth(configPath?: string): Promise<void> {
-    if (!(await isAuthenticated(configPath))) {
-      this.outputError('Please run \'sl login\' to authenticate', 'UNAUTHORIZED')
-      this.exit(3)
+    if ((await isAuthenticated(configPath))) {
+    	return;
     }
+
+    this.outputError('Please run \'sl login\' to authenticate', 'UNAUTHORIZED')
+    this.exit(3)
   }
 }

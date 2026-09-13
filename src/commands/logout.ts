@@ -7,15 +7,17 @@ export default class Logout extends BaseCommand<typeof Logout> {
     '<%= config.bin %> <%= command.id %>',
     '<%= config.bin %> <%= command.id %> --format json',
   ]
+
 static flags = {
     ...BaseCommand.baseFlags,
   }
+
 static override hidden = false
 
   async run(): Promise<void> {
     try {
       // Require authentication before logging out
-      await this.requireAuth(this.flags.config as string | undefined)
+      await this.requireAuth(this.flags.config)
 
       // Read current config
       const config = this.readConfig()
@@ -26,7 +28,7 @@ static override hidden = false
       }
 
       // Write updated config
-      writeConfig(newConfig, this.flags.config as string | undefined)
+      writeConfig(newConfig, this.flags.config)
 
       const format = this.getFormat()
 

@@ -14,6 +14,7 @@ static examples = [
     '<%= config.bin %> <%= command.id %> --all',
     '<%= config.bin %> <%= command.id %> --format json',
   ]
+
 static override hidden = false
 
   protected async fetchAliases(

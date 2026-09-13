@@ -287,7 +287,7 @@ Create a new random alias
 
 ```
 USAGE
-  $ sl alias create [--config <value>] [--format plain|json|yaml] [--note <value>] [--hostname <value>] [--mode
+  $ sl alias create [--config <value>] [--format plain|json|yaml] [--hostname <value>] [--note <value>] [--mode
     uuid|word]
 
 FLAGS
@@ -314,7 +314,7 @@ EXAMPLES
   $ sl alias create --mode word --note "Shopping" --format json
 ```
 
-_See code: [src/commands/alias/create.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/alias/create.ts)_
+_See code: [src/commands/alias/create.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/alias/create.ts)_
 
 ## `sl alias create-custom PREFIX SUFFIX`
 
@@ -322,7 +322,7 @@ Create a custom alias with specific prefix and suffix
 
 ```
 USAGE
-  $ sl alias create-custom PREFIX SUFFIX [--config <value>] [--format plain|json|yaml] [--note <value>] [--hostname
+  $ sl alias create-custom PREFIX SUFFIX [--config <value>] [--format plain|json|yaml] [--hostname <value>] [--note
     <value>] [--mailbox-ids <value>] [--name <value>]
 
 ARGUMENTS
@@ -354,7 +354,7 @@ EXAMPLES
   $ sl alias create-custom custom suffix789 --mailbox-ids 1,2,3 --format json
 ```
 
-_See code: [src/commands/alias/create-custom.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/alias/create-custom.ts)_
+_See code: [src/commands/alias/create-custom.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/alias/create-custom.ts)_
 
 ## `sl alias custom PREFIX SUFFIX`
 
@@ -362,7 +362,7 @@ Create a custom alias with specific prefix and suffix
 
 ```
 USAGE
-  $ sl alias custom PREFIX SUFFIX [--config <value>] [--format plain|json|yaml] [--note <value>] [--hostname
+  $ sl alias custom PREFIX SUFFIX [--config <value>] [--format plain|json|yaml] [--hostname <value>] [--note
     <value>] [--mailbox-ids <value>] [--name <value>]
 
 ARGUMENTS
@@ -427,7 +427,7 @@ EXAMPLES
   $ sl alias rm 123 --confirm
 ```
 
-_See code: [src/commands/alias/delete.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/alias/delete.ts)_
+_See code: [src/commands/alias/delete.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/alias/delete.ts)_
 
 ## `sl alias list`
 
@@ -435,8 +435,8 @@ List all aliases with pagination
 
 ```
 USAGE
-  $ sl alias list [--config <value>] [--format plain|json|yaml] [--page <value>] [--pinned | --disabled |
-    --enabled] [--all]
+  $ sl alias list [--all] [--config <value>] [--disabled | --pinned | --enabled] [--format plain|json|yaml]
+    [--page <value>]
 
 FLAGS
   --all              Fetch all pages automatically
@@ -470,7 +470,7 @@ EXAMPLES
   $ sl alias list --format json
 ```
 
-_See code: [src/commands/alias/list.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/alias/list.ts)_
+_See code: [src/commands/alias/list.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/alias/list.ts)_
 
 ## `sl alias ls`
 
@@ -478,8 +478,8 @@ List all aliases with pagination
 
 ```
 USAGE
-  $ sl alias ls [--config <value>] [--format plain|json|yaml] [--page <value>] [--pinned | --disabled |
-    --enabled] [--all]
+  $ sl alias ls [--all] [--config <value>] [--disabled | --pinned | --enabled] [--format plain|json|yaml]
+    [--page <value>]
 
 FLAGS
   --all              Fetch all pages automatically
@@ -519,8 +519,8 @@ Get available options for creating aliases
 
 ```
 USAGE
-  $ sl alias options [--config <value>] [--format plain|json|yaml] [--hostname <value>] [--domain <value>]
-    [--custom] [--premium] [--prefix]
+  $ sl alias options [--config <value>] [--custom] [--domain <value>] [--format plain|json|yaml] [--hostname
+    <value>] [--prefix] [--premium]
 
 FLAGS
   --config=<value>    [env: SIMPLELOGIN_CONFIG] Path to config file containing credentials
@@ -553,7 +553,7 @@ EXAMPLES
   $ sl alias options --format json
 ```
 
-_See code: [src/commands/alias/options.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/alias/options.ts)_
+_See code: [src/commands/alias/options.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/alias/options.ts)_
 
 ## `sl alias rm ALIAS-ID`
 
@@ -594,8 +594,8 @@ Search aliases by email address
 
 ```
 USAGE
-  $ sl alias search QUERY [--config <value>] [--format plain|json|yaml] [--page <value>] [--pinned | --disabled |
-    --enabled] [--all]
+  $ sl alias search QUERY [--all] [--config <value>] [--disabled | --pinned | --enabled] [--format
+    plain|json|yaml] [--page <value>]
 
 ARGUMENTS
   QUERY  Search query for alias email
@@ -625,7 +625,7 @@ EXAMPLES
   $ sl alias search search --format json
 ```
 
-_See code: [src/commands/alias/search.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/alias/search.ts)_
+_See code: [src/commands/alias/search.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/alias/search.ts)_
 
 ## `sl alias update ALIAS-ID`
 
@@ -633,8 +633,8 @@ Update alias settings
 
 ```
 USAGE
-  $ sl alias update ALIAS-ID [--config <value>] [--format plain|json|yaml] [--note <value>] [--name <value>]
-    [--mailbox-id <value>] [--mailbox-ids <value>] [--pinned] [--disable-pgp]
+  $ sl alias update ALIAS-ID [--config <value>] [--format plain|json|yaml] [--disable-pgp] [--mailbox-id <value>]
+    [--mailbox-ids <value>] [--name <value>] [--note <value>] [--pinned]
 
 ARGUMENTS
   ALIAS-ID  Alias ID
@@ -669,7 +669,7 @@ EXAMPLES
   $ sl alias update 123 --note "Shopping" --pinned --format json
 ```
 
-_See code: [src/commands/alias/update.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/alias/update.ts)_
+_See code: [src/commands/alias/update.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/alias/update.ts)_
 
 ## `sl config`
 
@@ -696,7 +696,7 @@ EXAMPLES
   $ sl config --format json
 ```
 
-_See code: [src/commands/config.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/config.ts)_
+_See code: [src/commands/config.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/config.ts)_
 
 ## `sl help [COMMAND]`
 
@@ -716,7 +716,7 @@ DESCRIPTION
   Display help for sl.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.36/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/7.0.0/src/commands/help.ts)_
 
 ## `sl login`
 
@@ -746,7 +746,7 @@ EXAMPLES
   $ sl login --key api-key
 ```
 
-_See code: [src/commands/login.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/login.ts)_
 
 ## `sl logout`
 
@@ -770,7 +770,7 @@ EXAMPLES
   $ sl logout --format json
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/logout.ts)_
 
 ## `sl whoami`
 
@@ -794,5 +794,5 @@ EXAMPLES
   $ sl whoami --format json
 ```
 
-_See code: [src/commands/whoami.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.0/src/commands/whoami.ts)_
+_See code: [src/commands/whoami.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/whoami.ts)_
 <!-- commandsstop -->

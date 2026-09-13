@@ -13,6 +13,7 @@ export default class AliasDelete extends BaseCommand<typeof AliasDelete> {
       required: true,
     }),
   }
+
 static description = 'Delete an alias by ID'
 static examples = [
     '<%= config.bin %> <%= command.id %> 123',
@@ -20,6 +21,7 @@ static examples = [
     '<%= config.bin %> <%= command.id %> 123 --format json',
     '<%= config.bin %> alias rm 123 --confirm',
   ]
+
 static flags = {
     ...BaseCommand.baseFlags,
     confirm: Flags.boolean({
@@ -27,33 +29,34 @@ static flags = {
       description: 'Skip confirmation prompt',
     }),
   }
+
 static override hidden = false
 
   async run(): Promise<void> {
     try {
       const {args, flags} = await this.parse(AliasDelete)
-      const aliasId = args['alias-id'] as number
+      const aliasId = args['alias-id']
       const format = this.getFormat()
-      const shouldConfirm = flags.confirm as boolean
+      const shouldConfirm = flags.confirm
 
       // Require authentication
-      await this.requireAuth(flags.config as string | undefined)
+      await this.requireAuth(flags.config)
 
       // If not confirmed, prompt for confirmation (skip in json/yaml mode)
       if (!shouldConfirm && format === 'plain') {
-        const confirmed = await confirm({
+        const isConfirmed = await confirm({
           default: false,
           message: `Are you sure you want to delete alias ${aliasId}?`,
         })
 
-        if (!confirmed) {
+        if (!isConfirmed) {
           this.log('Deletion cancelled.')
           return
         }
       }
 
       // Initialize API client
-      const config = await getSimpleLoginConfig(flags.config as string | undefined)
+      const config = await getSimpleLoginConfig(flags.config)
       const api = new AliasApi(config)
 
       // Delete the alias
@@ -64,7 +67,7 @@ static override hidden = false
       // Output result
       if (format === 'json' || format === 'yaml') {
         this.output({
-          deleted: result.deleted || true,
+          deleted: result.deleted ?? true,
           success: true,
         })
       } else {
