@@ -17,29 +17,29 @@
   ],
   "bugs": "https://github.com/KennethWussmann/simplelogin-cli/issues",
   "dependencies": {
-    "@inquirer/prompts": "^8.1.0",
-    "@oclif/core": "^4",
-    "@oclif/plugin-help": "^6",
-    "simplelogin-client": "^0.5.1",
-    "yaml": "^2.8.2"
+    "@inquirer/prompts": "^8.7.2",
+    "@oclif/core": "^5.0.0",
+    "@oclif/plugin-help": "^7.0.0",
+    "simplelogin-client": "^0.6.0",
+    "yaml": "^2.9.1"
   },
   "devDependencies": {
-    "@eslint/compat": "^2",
+    "@eslint/compat": "^2.1.1",
     "@oclif/prettier-config": "^0.2.1",
-    "@oclif/test": "^4",
-    "@types/chai": "^4",
-    "@types/mocha": "^10",
-    "@types/node": "^25",
-    "chai": "^6",
-    "eslint": "^9",
-    "eslint-config-oclif": "^6",
-    "eslint-config-prettier": "^10",
+    "@oclif/test": "^5.0.0",
+    "@types/chai": "^5.2.3",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^26.5.1",
+    "chai": "^6.2.2",
+    "eslint": "^10.10.0",
+    "eslint-config-oclif": "^7.1.7",
+    "eslint-config-prettier": "^10.1.8",
     "markdown-toc": "^1.2.0",
-    "mocha": "^11",
-    "oclif": "^4",
+    "mocha": "^12.0.1",
+    "oclif": "^6.0.0",
     "shx": "^0.4.0",
-    "ts-node": "^10",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=18.0.0"

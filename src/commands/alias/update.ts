@@ -1,13 +1,19 @@
 import {Args, Flags} from '@oclif/core'
-import {BaseCommand} from '../base.js'
 import {AliasApi} from 'simplelogin-client'
+
 import {getSimpleLoginConfig} from '../../utils/simplelogin-client.js'
+import {BaseCommand} from '../base.js'
 
 export default class AliasUpdate extends BaseCommand<typeof AliasUpdate> {
-  static override hidden = false
-  static description = 'Update alias settings'
+  static args = {
+    'alias-id': Args.integer({
+      description: 'Alias ID',
+      required: true,
+    }),
+  }
 
-  static examples = [
+  static description = 'Update alias settings'
+static examples = [
     '<%= config.bin %> <%= command.id %> 123 --note "Updated note"',
     '<%= config.bin %> <%= command.id %> 123 --name "My Alias"',
     '<%= config.bin %> <%= command.id %> 123 --mailbox-id 456',
@@ -17,20 +23,10 @@ export default class AliasUpdate extends BaseCommand<typeof AliasUpdate> {
     '<%= config.bin %> <%= command.id %> 123 --note "Shopping" --pinned --format json',
   ]
 
-  static args = {
-    'alias-id': Args.integer({
-      description: 'Alias ID',
-      required: true,
-    }),
-  }
-
-  static flags = {
+static flags = {
     ...BaseCommand.baseFlags,
-    note: Flags.string({
-      description: 'Update note',
-    }),
-    name: Flags.string({
-      description: 'Update display name',
+    'disable-pgp': Flags.boolean({
+      description: 'Disable/enable PGP',
     }),
     'mailbox-id': Flags.integer({
       description: 'Change primary mailbox',
@@ -38,18 +34,23 @@ export default class AliasUpdate extends BaseCommand<typeof AliasUpdate> {
     'mailbox-ids': Flags.string({
       description: 'Comma-separated mailbox IDs',
     }),
+    name: Flags.string({
+      description: 'Update display name',
+    }),
+    note: Flags.string({
+      description: 'Update note',
+    }),
     pinned: Flags.boolean({
       description: 'Pin/unpin alias',
     }),
-    'disable-pgp': Flags.boolean({
-      description: 'Disable/enable PGP',
-    }),
   }
+
+static override hidden = false
 
   async run(): Promise<void> {
     try {
       const {args, flags} = await this.parse(AliasUpdate)
-      const aliasId = args['alias-id'] as number
+      const aliasId = args['alias-id']
       const format = this.getFormat()
 
       // Validate that at least one optional parameter is provided
@@ -70,51 +71,51 @@ export default class AliasUpdate extends BaseCommand<typeof AliasUpdate> {
       }
 
       // Require authentication
-      await this.requireAuth(flags.config as string | undefined)
+      await this.requireAuth(flags.config)
 
       // Initialize API client
-      const config = await getSimpleLoginConfig(flags.config as string | undefined)
+      const config = await getSimpleLoginConfig(flags.config)
       const api = new AliasApi(config)
 
       // Build update payload
       const updatePayload: {
-        note?: string
-        name?: string
+        disablePgp?: boolean
         mailboxId?: number
         mailboxIds?: number[]
+        name?: string
+        note?: string
         pinned?: boolean
-        disablePgp?: boolean
       } = {}
 
       if (flags.note !== undefined) {
-        updatePayload.note = flags.note as string
+        updatePayload.note = flags.note
       }
 
       if (flags.name !== undefined) {
-        updatePayload.name = flags.name as string
+        updatePayload.name = flags.name
       }
 
       if (flags['mailbox-id'] !== undefined) {
-        updatePayload.mailboxId = flags['mailbox-id'] as number
+        updatePayload.mailboxId = flags['mailbox-id']
       }
 
       if (flags['mailbox-ids'] !== undefined) {
-        const mailboxIdsStr = flags['mailbox-ids'] as string
-        updatePayload.mailboxIds = mailboxIdsStr.split(',').map(id => Number.parseInt(id.trim(), 10))
+        const mailboxIdsStr = flags['mailbox-ids']
+        updatePayload.mailboxIds = mailboxIdsStr.split(',').map(id => Number(id.trim()))
       }
 
       if (flags.pinned !== undefined) {
-        updatePayload.pinned = flags.pinned as boolean
+        updatePayload.pinned = flags.pinned
       }
 
       if (flags['disable-pgp'] !== undefined) {
-        updatePayload.disablePgp = flags['disable-pgp'] as boolean
+        updatePayload.disablePgp = flags['disable-pgp']
       }
 
       // Update the alias
       await api.updateAlias({
-        aliasId,
         aliasAliasIdPatch: updatePayload,
+        aliasId,
       })
 
       // Output result

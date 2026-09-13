@@ -1,21 +1,21 @@
-import {existsSync, mkdirSync, readFileSync, writeFileSync, chmodSync} from 'node:fs'
-import {dirname, join} from 'node:path'
+import {chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs'
 import {homedir} from 'node:os'
+import nodePath from 'node:path'
 import YAML from 'yaml'
 
-export interface Config {
-  url?: string
+export type Config = {
   apiKey?: string
+  url?: string
 }
 
-export const DEFAULT_CONFIG_PATH = join(homedir(), '.config', 'simplelogin-cli', 'config.yaml')
+export const DEFAULT_CONFIG_PATH = nodePath.join(homedir(), '.config', 'simplelogin-cli', 'config.yaml')
 
 
 /**
  * Get the config file path, using the provided path or the default
  */
 export function getConfigPath(configPath?: string): string {
-  return configPath || DEFAULT_CONFIG_PATH
+  return configPath ?? DEFAULT_CONFIG_PATH
 }
 
 /**
@@ -30,9 +30,9 @@ export function readConfig(configPath?: string): Config {
 
   try {
     const content = readFileSync(path, 'utf8')
-    return YAML.parse(content) || {}
+    return (YAML.parse(content) as Config | undefined  ) ?? {}
   } catch (error) {
-    throw new Error(`Failed to read config file: ${error instanceof Error ? error.message : String(error)}`)
+    throw new Error(`Failed to read config file: ${error instanceof Error ? error.message : String(error)}`, {cause: error})
   }
 }
 
@@ -42,11 +42,11 @@ export function readConfig(configPath?: string): Config {
  */
 export function writeConfig(config: Config, configPath?: string): void {
   const path = getConfigPath(configPath)
-  const dir = dirname(path)
+  const dir = nodePath.dirname(path)
 
   // Create directory if it doesn't exist
   if (!existsSync(dir)) {
-    mkdirSync(dir, {recursive: true, mode: 0o700})
+    mkdirSync(dir, {mode: 0o700, recursive: true})
   }
 
   try {
@@ -56,13 +56,13 @@ export function writeConfig(config: Config, configPath?: string): void {
     // Ensure permissions are set correctly even if file already existed
     chmodSync(path, 0o600)
   } catch (error) {
-    throw new Error(`Failed to write config file: ${error instanceof Error ? error.message : String(error)}`)
+    throw new Error(`Failed to write config file: ${error instanceof Error ? error.message : String(error)}`, {cause: error})
   }
 }
 
 /**
  * Redact an API key for display (show only first 8 characters)
  */
-export function redactApiKey(apiKey: string): string {
+export function redactApiKey(_apiKey: string): string {
   return "******"
 }
