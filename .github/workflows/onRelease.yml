@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: '24'
       - name: Update npm for trusted publishing
-        run: npm install -g npm@latest
+        run: npm install -g npm@11
       - uses: pnpm/action-setup@v6
         name: Install pnpm
         id: pnpm-install
