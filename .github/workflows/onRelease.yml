@@ -15,7 +15,8 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
+      - name: Update npm for trusted publishing
+        run: npm install -g npm@latest
       - uses: pnpm/action-setup@v6
         name: Install pnpm
         id: pnpm-install
@@ -37,7 +38,7 @@ jobs:
       - run: pnpm install
       - run: pnpm run build
       - run: pnpm run prepack
-      - run: npm publish --no-git-checks --access public
+      - run: npm publish --access public
       - run: pnpm run postpack
       - run: pnpm run pack:tarballs
       - name: Upload tarballs to release
