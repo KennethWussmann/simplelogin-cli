@@ -314,7 +314,7 @@ EXAMPLES
   $ sl alias create --mode word --note "Shopping" --format json
 ```
 
-_See code: [src/commands/alias/create.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/alias/create.ts)_
+_See code: [src/commands/alias/create.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.3.2/src/commands/alias/create.ts)_
 
 ## `sl alias create-custom PREFIX SUFFIX`
 
@@ -354,7 +354,7 @@ EXAMPLES
   $ sl alias create-custom custom suffix789 --mailbox-ids 1,2,3 --format json
 ```
 
-_See code: [src/commands/alias/create-custom.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/alias/create-custom.ts)_
+_See code: [src/commands/alias/create-custom.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.3.2/src/commands/alias/create-custom.ts)_
 
 ## `sl alias custom PREFIX SUFFIX`
 
@@ -427,7 +427,7 @@ EXAMPLES
   $ sl alias rm 123 --confirm
 ```
 
-_See code: [src/commands/alias/delete.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/alias/delete.ts)_
+_See code: [src/commands/alias/delete.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.3.2/src/commands/alias/delete.ts)_
 
 ## `sl alias list`
 
@@ -470,7 +470,7 @@ EXAMPLES
   $ sl alias list --format json
 ```
 
-_See code: [src/commands/alias/list.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/alias/list.ts)_
+_See code: [src/commands/alias/list.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.3.2/src/commands/alias/list.ts)_
 
 ## `sl alias ls`
 
@@ -553,7 +553,7 @@ EXAMPLES
   $ sl alias options --format json
 ```
 
-_See code: [src/commands/alias/options.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/alias/options.ts)_
+_See code: [src/commands/alias/options.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.3.2/src/commands/alias/options.ts)_
 
 ## `sl alias rm ALIAS-ID`
 
@@ -625,7 +625,7 @@ EXAMPLES
   $ sl alias search search --format json
 ```
 
-_See code: [src/commands/alias/search.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/alias/search.ts)_
+_See code: [src/commands/alias/search.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.3.2/src/commands/alias/search.ts)_
 
 ## `sl alias update ALIAS-ID`
 
@@ -669,7 +669,7 @@ EXAMPLES
   $ sl alias update 123 --note "Shopping" --pinned --format json
 ```
 
-_See code: [src/commands/alias/update.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/alias/update.ts)_
+_See code: [src/commands/alias/update.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.3.2/src/commands/alias/update.ts)_
 
 ## `sl config`
 
@@ -696,7 +696,7 @@ EXAMPLES
   $ sl config --format json
 ```
 
-_See code: [src/commands/config.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/config.ts)_
+_See code: [src/commands/config.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.3.2/src/commands/config.ts)_
 
 ## `sl help [COMMAND]`
 
@@ -746,7 +746,7 @@ EXAMPLES
   $ sl login --key api-key
 ```
 
-_See code: [src/commands/login.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.3.2/src/commands/login.ts)_
 
 ## `sl logout`
 
@@ -770,7 +770,7 @@ EXAMPLES
   $ sl logout --format json
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.3.2/src/commands/logout.ts)_
 
 ## `sl whoami`
 
@@ -794,5 +794,5 @@ EXAMPLES
   $ sl whoami --format json
 ```
 
-_See code: [src/commands/whoami.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.2.2/src/commands/whoami.ts)_
+_See code: [src/commands/whoami.ts](https://github.com/KennethWussmann/simplelogin-cli/blob/v0.3.2/src/commands/whoami.ts)_
 <!-- commandsstop -->
